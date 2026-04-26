@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roman Myronchuk — AI Systems Architect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Montserrat', sans-serif; background: #fff; color: #0f172a; }
+
+    /* ── Reveal animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s cubic-bezier(.4,0,.2,1), transform 0.65s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .delay-1 { transition-delay: 0.12s; }
+    .delay-2 { transition-delay: 0.24s; }
+    .delay-3 { transition-delay: 0.36s; }
+
+    /* ── Hero ── */
+    .hero-bg {
+      background: #07101f;
+      background-image:
+        radial-gradient(ellipse 60% 70% at 15% 55%, rgba(8,126,164,.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 85% 15%, rgba(14,165,201,.1) 0%, transparent 50%),
+        linear-gradient(rgba(8,126,164,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,126,164,.04) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 52px 52px, 52px 52px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(120deg, #38bdf8 0%, #0ea5e9 40%, #087ea4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Cards ── */
+    .case-card-wrap {
+      transition: transform .3s ease, box-shadow .3s ease;
+      cursor: default;
+    }
+    .case-card-wrap:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(0,0,0,.11) !important;
+    }
+
+    .tech-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      padding: 5px 13px;
+      border-radius: 100px;
+      transition: all .2s;
+      cursor: default;
+    }
+    .tech-badge:hover { background: #087ea4; color: #fff; border-color: #087ea4; }
+
+    /* ── Form ── */
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      color: #0f172a;
+      background: #f8fafc;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      display: block;
+    }
+    .form-input:focus {
+      border-color: #087ea4;
+      box-shadow: 0 0 0 3px rgba(8,126,164,.12);
+      background: #fff;
+    }
+
+    /* ── Contact link hover ── */
+    .contact-link { transition: background .2s; }
+    .contact-link:hover { background: rgba(8,126,164,.15) !important; }
+
+    /* ── Pricing card hover ── */
+    .pricing-card-base {
+      transition: box-shadow .3s, transform .3s;
+    }
+    .pricing-card-base:hover {
+      box-shadow: 0 16px 40px rgba(0,0,0,.1) !important;
+      transform: translateY(-3px);
+    }
+
+    /* ── Responsive ── */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .pricing-layout { grid-template-columns: 1fr !important; max-width: 480px; margin: 0 auto; }
+      .pricing-popular-card { transform: none !important; }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .desktop-only { display: none !important; }
+      .mobile-only  { display: flex !important; }
+
+      /* Grids → single column */
+      .hero-layout    { grid-template-columns: 1fr !important; gap: 32px !important; text-align: center; }
+      .about-layout   { grid-template-columns: 1fr !important; gap: 40px !important; }
+      .cases-layout   { grid-template-columns: 1fr !important; }
+      .pricing-layout { grid-template-columns: 1fr !important; max-width: 100%; }
+      .contact-layout { grid-template-columns: 1fr !important; gap: 32px !important; }
+      .pricing-popular-card { transform: none !important; }
+
+      /* Hero photo – top, centered */
+      .hero-img { order: -1; justify-content: center !important; }
+      .hero-img img { width: 160px !important; height: 160px !important; }
+      .hero-img > div > div { width: 168px !important; height: 168px !important; }
+
+      /* Hero text – center everything */
+      .hero-badge   { justify-content: center !important; }
+      .hero-btns    { justify-content: center !important; }
+      .hero-stats   { justify-content: center !important; gap: 20px !important;
+                      margin-top: 36px !important; padding-top: 28px !important; }
+
+      /* Section vertical padding */
+      .sec-pad { padding-top: 60px !important; padding-bottom: 60px !important; padding-left: 16px !important; padding-right: 16px !important; }
+      .hero-inner { padding: 44px 16px !important; }
+
+      /* Contact form inner box */
+      .form-box { padding: 24px 20px !important; }
+
+      /* About approach box */
+      .approach-box { padding: 18px !important; }
+
+      /* Reduce pricing gap */
+      .pricing-layout { gap: 16px !important; padding-top: 8px !important; }
+
+      /* Tech badges smaller on mobile */
+      .tech-badge { font-size: 11px !important; padding: 4px 10px !important; }
+      .tech-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Extra small */
+    @media (max-width: 400px) {
+      .hero-stats { gap: 12px !important; }
+      .hero-stats > div { min-width: 70px; }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-only { display: none !important; }
+    }
+
+    /* ── Pulse dot ── */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .6; transform: scale(1.4); }
+    }
+    .pulse { animation: pulse-dot 2s ease-in-out infinite; }
+
+    /* Tag chips */
+    .tag-ai       { background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; }
+    .tag-ecom     { background:#fffbeb; color:#d97706; border:1px solid #fcd34d; }
+    .tag-telegram { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
+    .tag-data     { background:#fdf4ff; color:#9333ea; border:1px solid #e9d5ff; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- Tweaks panel (inlined) -->
+<script type="text/babel">
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;height:22px;
+    border-radius:6px;cursor:default;padding:0}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((key, val) => {
+    setValues((prev) => ({ ...prev, [key]: val }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel"
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value}
+             onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakToggle, TweakRadio, TweakColor,
+});
+</script>
+
+<!-- Main app -->
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ─── Data ── */
+const CASES = [
+  {
+    title: 'AI-Бот для прийому клієнтів 24/7',
+    desc:  'Комплексна система автоматизації продажів: від консультації до угоди в CRM.',
+    features: [
+      'Миттєві відповіді та консультація по каталогу',
+      'Покроковий збір брифу на замовлення (8 параметрів)',
+      'Збереження лідів у PostgreSQL та KeyCRM',
+      'Визначення «гарячості» ліда та пам\'ять діалогу',
+    ],
+    tag: 'AI Sales', tagCls: 'tag-ai',
+  },
+  {
+    title: 'Urban Trend — Auto Description Generator',
+    desc:  'Автоматизація каталогізації товарів для інтернет-магазину за допомогою AI-зору.',
+    features: [
+      'Аналіз фото товару через GPT-4o Vision',
+      'Генерація продаючих описів для Instagram',
+      'Автоматичне додавання карток у Google Sheets',
+      'AI-агент для управління базою (SQL через текст)',
+    ],
+    tag: 'E-commerce', tagCls: 'tag-ecom',
+  },
+  {
+    title: 'Telegram Mini App Магазин Одягу',
+    desc:  'Повноцінний інтернет-магазин всередині Telegram з адмін-панеллю.',
+    features: [
+      'Зручний інтерфейс каталогу та кошика',
+      'Інтеграція онлайн-оплат',
+      'Автоматичне оформлення доставки (Нова Пошта)',
+      'Зручна адмін-панель для управління товарами',
+    ],
+    tag: 'Telegram App', tagCls: 'tag-telegram',
+  },
+  {
+    title: 'Система пошуку трендових товарів',
+    desc:  'Аналітичний інструмент для пошуку перспективних товарів для дропшипінгу чи e-commerce.',
+    features: [
+      'Моніторинг трендів у TikTok',
+      'Аналіз актуальності на українському ринку',
+      'Автоматичний пошук постачальників у Китаї',
+      'Збір даних для прийняття рішень',
+    ],
+    tag: 'Data Analytics', tagCls: 'tag-data',
+  },
+];
+
+const PLANS = [
+  {
+    name: 'Start System', price: '$250–599',
+    sub: 'Для старту автоматизації',
+    features: [
+      'Базовий Telegram-бот або Mini App',
+      'Автоматизація 1-2 бізнес-процесів',
+      'Синхронізація з Google Sheets / Airtable',
+      'Налаштування системних сповіщень',
+    ],
+  },
+  {
+    name: 'Business Core', price: '$900–1500',
+    sub: 'Комплексне рішення для бізнесу',
+    features: [
+      'Комплексна AI-система прийому заявок',
+      'Інтеграція з CRM (KeyCRM) та БД (PostgreSQL)',
+      'AI-генерація контенту (GPT-4o Vision)',
+      'Автоматизація доставки та оплат',
+      'Модуль аналітики та кваліфікації лідів',
+    ],
+    popular: true,
+  },
+  {
+    name: 'Enterprise Logic', price: 'від $2000',
+    sub: 'Повна цифрова екосистема',
+    features: [
+      'Повноцінна цифрова екосистема',
+      'Складні AI-агенти (LangChain, SQL-запити)',
+      'Системи аналітики трендів (TikTok, Китай)',
+      'Кастомні веб-додатки та адмін-панелі',
+      'Масштабована архітектура під high-load',
+    ],
+  },
+];
+
+const TECH_CATEGORIES = [
+  {
+    label: 'AI-моделі та LLM',
+    items: ['Claude', 'Claude Code', 'GPT', 'Gemini'],
+  },
+  {
+    label: 'AI-середовища та IDE',
+    items: ['Cursor', 'VS Code', 'Antigravity', 'Lovable'],
+  },
+  {
+    label: 'Автоматизація',
+    items: ['Make', 'n8n'],
+  },
+  {
+    label: 'Бази даних',
+    items: ['PostgreSQL', 'Supabase', 'Airtable', 'MongoDB', 'MySQL', 'Redis', 'Firebase', 'Notion DB', 'Pinecone', 'RAG'],
+  },
+  {
+    label: 'API Integration',
+    items: ['REST API', 'Webhooks', 'Telegram Bot API', 'Google API'],
+  },
+  {
+    label: 'Інфраструктура',
+    items: ['Vercel', 'Railway', 'Docker'],
+  },
+];
+
+const STATS = [['15+','Завершених проектів'],['10+','Задоволених клієнтів'],['3×','Прискорення процесів']];
+const WEBHOOK = 'https://n8n.myproject.pp.ua/webhook-test/b591e01e-c6ff-4fcf-843d-28cb282f8fba';
+
+/* ─── Icons ── */
+const IconCheck = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:2}}>
+    <path d="M5 13l4 4L19 7"/>
+  </svg>
+);
+const IconTelegram = ({ sz=22 }) => (
+  <svg width={sz} height={sz} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.883 13.99l-2.938-.916c-.638-.203-.651-.638.135-.944l11.467-4.42c.533-.194 1.001.131.347.511z"/>
+  </svg>
+);
+const IconInsta = ({ sz=22 }) => (
+  <svg width={sz} height={sz} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162S8.597 18.163 12 18.163s6.162-2.759 6.162-6.162S15.403 5.838 12 5.838zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  </svg>
+);
+const IconEmail = ({ sz=22 }) => (
+  <svg width={sz} height={sz} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+  </svg>
+);
+const IconMenu = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+  </svg>
+);
+const IconX = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
+  </svg>
+);
+
+/* ─── Shared helpers ── */
+const SectionLabel = ({ text, light }) => (
+  <div style={{fontSize:12,fontWeight:700,letterSpacing:2.5,textTransform:'uppercase',color:light?'#38bdf8':'#087ea4',marginBottom:10}}>
+    {text}
+  </div>
+);
+
+const SectionTitle = ({ text, light }) => (
+  <h2 style={{fontSize:'clamp(28px,4vw,42px)',fontWeight:900,color:light?'#fff':'#0f172a',letterSpacing:'-1px',lineHeight:1.1,margin:0}}>
+    {text}
+  </h2>
+);
+
+const scrollTo = (el, offset=68) => {
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top, behavior:'smooth' });
+};
+
+/* ─── useScrollReveal ── */
+const useScrollReveal = () => {
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+};
+
+/* ─── Header ── */
+const Header = ({ onNav, active, accent }) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const links = [
+    { label:'Про мене', key:'about' },
+    { label:'Кейси',   key:'cases' },
+    { label:'Пакети',  key:'pricing' },
+    { label:'Контакти',key:'contact' },
+  ];
+
+  const hdrStyle = {
+    position:'sticky', top:0, zIndex:100,
+    background: scrolled ? 'rgba(255,255,255,.96)' : 'rgba(255,255,255,.92)',
+    backdropFilter:'blur(14px)',
+    borderBottom: scrolled ? '1px solid #e2e8f0' : '1px solid transparent',
+    transition:'border-color .3s, background .3s',
+  };
+
+  const btnBase = {
+    background:'none', border:'none', cursor:'pointer',
+    fontFamily:'Montserrat', fontSize:14, fontWeight:600,
+    padding:'6px 0', position:'relative', transition:'color .2s',
+  };
+
+  return (
+    <header style={hdrStyle}>
+      <div style={{maxWidth:1180,margin:'0 auto',padding:'0 24px',display:'flex',alignItems:'center',justifyContent:'space-between',height:68}}>
+
+        <a href="#" style={{textDecoration:'none',display:'flex',alignItems:'baseline',gap:8}}>
+          <span style={{fontWeight:900,fontSize:17,color:'#0f172a',letterSpacing:'-0.5px'}}>Roman Myronchuk</span>
+          <span style={{fontWeight:600,fontSize:12,color:accent,letterSpacing:0}} className="desktop-only">— AI Systems Architect</span>
+        </a>
+
+        {/* Desktop nav */}
+        <nav style={{display:'flex',alignItems:'center',gap:28}} className="desktop-only">
+          {links.map(l => (
+            <button key={l.key} onClick={() => onNav(l.key)} style={{...btnBase, color: active===l.key ? accent : '#475569'}}>
+              {l.label}
+              {active===l.key && <span style={{position:'absolute',bottom:-2,left:0,right:0,height:2,background:accent,borderRadius:2}} />}
+            </button>
+          ))}
+          <button onClick={() => onNav('contact')}
+            style={{background:accent,color:'#fff',border:'none',padding:'10px 22px',borderRadius:9,fontFamily:'Montserrat',fontSize:13,fontWeight:700,cursor:'pointer',transition:'opacity .2s'}}
+            onMouseEnter={e=>e.target.style.opacity='.85'} onMouseLeave={e=>e.target.style.opacity='1'}>
+            Обговорити проект
+          </button>
+        </nav>
+
+        {/* Burger */}
+        <button className="mobile-only" onClick={() => setOpen(!open)}
+          style={{background:'none',border:'none',cursor:'pointer',color:'#475569',display:'none'}}>
+          {open ? <IconX /> : <IconMenu />}
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div style={{borderTop:'1px solid #f1f5f9',background:'#fff'}}>
+          {links.map(l => (
+            <button key={l.key} onClick={() => { onNav(l.key); setOpen(false); }}
+              style={{display:'block',width:'100%',textAlign:'left',padding:'14px 24px',background:'none',border:'none',fontFamily:'Montserrat',fontSize:15,fontWeight:600,color:active===l.key?accent:'#475569',cursor:'pointer',borderBottom:'1px solid #f8fafc'}}>
+              {l.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </header>
+  );
+};
+
+/* ─── Hero ── */
+const Hero = ({ onCTA, accent }) => (
+  <section className="hero-bg" style={{minHeight:'calc(100vh - 68px)',display:'flex',alignItems:'center'}}>
+    <div className="hero-inner" style={{maxWidth:1180,margin:'0 auto',padding:'72px 24px',width:'100%'}}>
+      <div className="hero-layout" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:64,alignItems:'center'}}>
+
+        {/* Text */}
+        <div>
+          <div className="hero-badge" style={{display:'inline-flex',alignItems:'center',gap:8,background:'rgba(8,126,164,.14)',border:'1px solid rgba(8,126,164,.3)',padding:'6px 14px',borderRadius:100,marginBottom:28}}>
+            <span className="pulse" style={{width:7,height:7,borderRadius:'50%',background:'#4ade80',display:'block',boxShadow:'0 0 8px #4ade80'}}></span>
+            <span style={{color:'#7dd3fc',fontSize:12,fontWeight:700}}>Доступний для нових проектів</span>
+          </div>
+
+          <h1 style={{fontSize:'clamp(34px,4.5vw,60px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'-1.5px',margin:0}}>
+            Проектую та будую<br/>
+            <span className="gradient-text">AI-системи</span><br/>
+            для бізнесу
+          </h1>
+
+          <p style={{marginTop:24,fontSize:17,color:'#94a3b8',lineHeight:1.75,maxWidth:460}}>
+            Розробляю кастомну архітектуру автоматизації на базі Make, n8n та Cursor. Перетворюю хаос ручних процесів на чіткі масштабовані алгоритми.
+          </p>
+
+          <div className="hero-btns" style={{display:'flex',gap:14,marginTop:40,flexWrap:'wrap'}}>
+            <button onClick={onCTA}
+              style={{background:`linear-gradient(135deg, ${accent} 0%, #0ea5c9 100%)`,color:'#fff',border:'none',padding:'15px 32px',borderRadius:10,fontFamily:'Montserrat',fontSize:15,fontWeight:700,cursor:'pointer',boxShadow:`0 8px 28px rgba(8,126,164,.45)`,transition:'transform .25s, box-shadow .25s'}}
+              onMouseEnter={e=>{e.target.style.transform='translateY(-2px)';e.target.style.boxShadow='0 12px 36px rgba(8,126,164,.55)';}}
+              onMouseLeave={e=>{e.target.style.transform='none';e.target.style.boxShadow=`0 8px 28px rgba(8,126,164,.45)`;}}
+            >
+              Обговорити проект →
+            </button>
+            <a href="https://t.me/romanmuronchuk" target="_blank" rel="noopener noreferrer"
+              style={{display:'inline-flex',alignItems:'center',gap:8,background:'rgba(255,255,255,.07)',color:'#fff',border:'1px solid rgba(255,255,255,.15)',padding:'15px 26px',borderRadius:10,fontSize:15,fontWeight:600,textDecoration:'none',fontFamily:'Montserrat',transition:'background .2s'}}
+              onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,.13)'}
+              onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,.07)'}
+            >
+              <IconTelegram sz={18}/> Telegram
+            </a>
+          </div>
+
+          {/* Stats */}
+          <div className="hero-stats" style={{display:'flex',gap:40,marginTop:56,paddingTop:40,borderTop:'1px solid rgba(255,255,255,.07)',flexWrap:'wrap'}}>
+            {STATS.map(([val,lbl],i) => (
+              <div key={i}>
+                <div style={{fontSize:34,fontWeight:900,color:'#fff',letterSpacing:'-1px'}}>{val}</div>
+                <div style={{fontSize:12,color:'#475569',marginTop:4,fontWeight:600}}>{lbl}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Photo */}
+        <div className="hero-img" style={{display:'flex',justifyContent:'center'}}>
+          <div style={{position:'relative'}}>
+            <div style={{width:320,height:320,borderRadius:'50%',background:`linear-gradient(135deg, ${accent}, #0ea5c9)`,padding:4,boxShadow:`0 0 0 1px rgba(8,126,164,.35), 0 0 60px rgba(8,126,164,.25)`}}>
+              <img src="https://i.ibb.co/5gqbyscf/photo-2025-11-17-17-28-51-1-1.png" alt="Roman Myronchuk"
+                style={{width:'100%',height:'100%',borderRadius:'50%',objectFit:'cover',display:'block'}} />
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+);
+
+/* ─── About ── */
+const About = ({ sRef, accent }) => (
+  <section ref={sRef} id="about" className="sec-pad" style={{background:'#fff',padding:'96px 24px'}}>
+    <div style={{maxWidth:1180,margin:'0 auto'}}>
+      <div className="reveal" style={{textAlign:'center',marginBottom:64}}>
+        <SectionLabel text="Про мене" />
+        <SectionTitle text="Будую цифрову архітектуру бізнесу" />
+      </div>
+
+      <div className="about-layout" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:64,alignItems:'start'}}>
+        <div className="reveal">
+          <p style={{fontSize:16,color:'#475569',lineHeight:1.85,marginBottom:20}}>
+            Я не просто налаштовую інструменти — я будую цифрову архітектуру бізнесу. Моя спеціалізація — розробка кастомних систем на базі AI, Make, n8n та Cursor.
+          </p>
+          <p style={{fontSize:16,color:'#475569',lineHeight:1.85,marginBottom:36}}>
+            Перетворюю хаос у заявках, документах та фінансах на чіткі автоматизовані алгоритми, повертаючи власникам контроль над процесами та час для стратегічного розвитку.
+          </p>
+
+          {/* Mini stats */}
+          <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
+            {[['15+','Проектів'],['10+','Клієнтів'],['3×','Avg ROI']].map(([v,l]) => (
+              <div key={l} style={{flex:1,minWidth:90,textAlign:'center',background:'#f0f9ff',borderRadius:14,padding:'18px 12px',border:'1px solid #bae6fd'}}>
+                <div style={{fontSize:26,fontWeight:900,color:accent}}>{v}</div>
+                <div style={{fontSize:11,fontWeight:700,color:'#64748b',marginTop:4,textTransform:'uppercase',letterSpacing:1}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="reveal delay-1">
+          <div style={{fontSize:11,fontWeight:800,color:'#0f172a',letterSpacing:2.5,textTransform:'uppercase',marginBottom:16}}>Технологічний стек</div>
+          <div className="tech-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10,marginBottom:28}}>
+            {TECH_CATEGORIES.map(cat => (
+              <div key={cat.label} style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:14,padding:'14px 16px'}}>
+                <div style={{fontSize:10,fontWeight:800,color:'#0f172a',letterSpacing:1.5,textTransform:'uppercase',marginBottom:9}}>{cat.label}</div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                  {cat.items.map(t => <span key={t} className="tech-badge">{t}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="approach-box" style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:16,padding:24}}>
+            <div style={{fontSize:13,fontWeight:800,color:'#0f172a',marginBottom:16}}>Що відрізняє мій підхід:</div>
+            {['Проектування AI-архітектур з нуля','Інтеграція різнорідних систем в єдиний потік','Автоматизація продажів та обробки заявок','Розробка Telegram Mini Apps та ботів'].map((item,i) => (
+              <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:13,color:'#475569',fontSize:14}}>
+                <span style={{color:accent}}><IconCheck /></span>{item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ─── Cases ── */
+const CaseCard = ({ c, idx, accent }) => (
+  <div className="reveal case-card-wrap" style={{transitionDelay:`${idx*0.09}s`}}>
+    <div style={{background:'#fff',border:'1px solid #f1f5f9',borderRadius:20,padding:32,height:'100%',display:'flex',flexDirection:'column',boxShadow:'0 2px 8px rgba(0,0,0,.04)'}}>
+      <span className={c.tagCls} style={{fontSize:11,fontWeight:700,padding:'4px 12px',borderRadius:100,display:'inline-block',marginBottom:16,fontFamily:'Montserrat'}}>
+        {c.tag}
+      </span>
+      <h3 style={{fontSize:19,fontWeight:800,color:'#0f172a',margin:'0 0 10px',letterSpacing:'-0.3px'}}>{c.title}</h3>
+      <p style={{fontSize:13,color:'#64748b',lineHeight:1.65,margin:'0 0 20px'}}>{c.desc}</p>
+      <div style={{marginTop:'auto'}}>
+        {c.features.map((f,i) => (
+          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:9,marginBottom:10,color:'#475569',fontSize:13}}>
+            <span style={{color:accent,marginTop:1}}><IconCheck /></span>{f}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const Cases = ({ sRef, accent }) => (
+  <section ref={sRef} id="cases" className="sec-pad" style={{background:'#f8fafc',padding:'96px 24px'}}>
+    <div style={{maxWidth:1180,margin:'0 auto'}}>
+      <div className="reveal" style={{textAlign:'center',marginBottom:64}}>
+        <SectionLabel text="Кейси" />
+        <SectionTitle text="Реальні проекти — реальні результати" />
+        <p style={{fontSize:15,color:'#64748b',marginTop:12}}>Кожен кейс — системне рішення під конкретну бізнес-задачу</p>
+      </div>
+      <div className="cases-layout" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:24}}>
+        {CASES.map((c,i) => <CaseCard key={i} c={c} idx={i} accent={accent} />)}
+      </div>
+    </div>
+  </section>
+);
+
+/* ─── Pricing ── */
+const PricingCard = ({ plan, onSelect, idx, accent }) => {
+  const { name, price, sub, features, popular } = plan;
+  return (
+    <div className={`reveal pricing-card-base${popular?' pricing-popular-card':''}`} style={{
+      position:'relative',
+      transitionDelay:`${idx*0.1}s`,
+      background: popular ? '#07101f' : '#fff',
+      border: popular ? `1px solid rgba(8,126,164,.4)` : '1px solid #e2e8f0',
+      borderRadius:20,
+      padding:36,
+      display:'flex',flexDirection:'column',
+      boxShadow: popular ? `0 24px 64px rgba(8,126,164,.18)` : '0 2px 8px rgba(0,0,0,.04)',
+      transform: popular ? 'scale(1.04)' : 'none',
+    }}>
+      {popular && (
+        <div style={{position:'absolute',top:-14,left:'50%',transform:'translateX(-50%)',background:`linear-gradient(135deg,${accent},#0ea5c9)`,color:'#fff',fontSize:11,fontWeight:700,padding:'6px 18px',borderRadius:100,whiteSpace:'nowrap',boxShadow:'0 4px 14px rgba(8,126,164,.4)',fontFamily:'Montserrat'}}>
+          ⭐ Найпопулярніший
+        </div>
+      )}
+      <div style={{fontSize:11,fontWeight:800,color:popular?'#38bdf8':accent,textTransform:'uppercase',letterSpacing:2.5,marginBottom:12}}>{name}</div>
+      <div style={{fontSize:36,fontWeight:900,color:popular?'#fff':'#0f172a',letterSpacing:'-1.5px',marginBottom:4}}>{price}</div>
+      <div style={{fontSize:13,color:popular?'#475569':'#94a3b8',marginBottom:28}}>{sub}</div>
+      <div style={{borderTop:`1px solid ${popular?'rgba(255,255,255,.08)':'#f1f5f9'}`,paddingTop:24,flex:1}}>
+        {features.map((f,i) => (
+          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:14,color:popular?'#cbd5e1':'#475569',fontSize:14}}>
+            <span style={{color:accent}}><IconCheck /></span>{f}
+          </div>
+        ))}
+      </div>
+      <button onClick={onSelect}
+        style={{
+          width:'100%',marginTop:28,padding:'14px 20px',
+          background:popular?`linear-gradient(135deg,${accent},#0ea5c9)`:'transparent',
+          border:popular?'none':`2px solid ${accent}`,
+          color:popular?'#fff':accent,
+          borderRadius:10,fontFamily:'Montserrat',fontSize:14,fontWeight:700,
+          cursor:'pointer',transition:'all .25s',
+          boxShadow:popular?`0 8px 24px rgba(8,126,164,.35)`:'none',
+        }}
+        onMouseEnter={e=>{if(!popular){e.target.style.background=accent;e.target.style.color='#fff';}else{e.target.style.opacity='.88';}}}
+        onMouseLeave={e=>{if(!popular){e.target.style.background='transparent';e.target.style.color=accent;}else{e.target.style.opacity='1';}}}
+      >
+        Обрати пакет
+      </button>
+    </div>
+  );
+};
+
+const Pricing = ({ sRef, onSelect, accent }) => (
+  <section ref={sRef} id="pricing" className="sec-pad" style={{background:'#fff',padding:'96px 24px'}}>
+    <div style={{maxWidth:1180,margin:'0 auto'}}>
+      <div className="reveal" style={{textAlign:'center',marginBottom:72}}>
+        <SectionLabel text="Пакети послуг" />
+        <SectionTitle text="Оберіть своє рішення" />
+        <p style={{fontSize:15,color:'#64748b',marginTop:12,maxWidth:500,margin:'12px auto 0'}}>
+          Інструменти та платформи підбираються індивідуально під вашу задачу
+        </p>
+      </div>
+      <div className="pricing-layout" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24,alignItems:'start',paddingTop:20}}>
+        {PLANS.map((p,i) => <PricingCard key={i} plan={p} onSelect={onSelect} idx={i} accent={accent} />)}
+      </div>
+    </div>
+  </section>
+);
+
+/* ─── Contact ── */
+const Contact = ({ sRef, accent }) => {
+  const [form, setForm] = useState({ name:'', contact:'', description:'' });
+  const [status, setStatus] = useState('idle');
+  const [submitting, setSubmitting] = useState(false);
+  const [savedName, setSavedName] = useState('');
+
+  const tgFallback = () => {
+    const txt = `👋 Привіт! Пишу з сайту.\n\n👤 Ім'я: ${form.name}\n📧 Контакт: ${form.contact}\n📝 Запит: ${form.description}`;
+    return `https://t.me/romanmuronchuk?text=${encodeURIComponent(txt)}`;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 10000);
+      const res = await fetch(WEBHOOK, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(form),
+        keepalive: true,
+        signal: ctrl.signal,
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        setSavedName(form.name);
+        setForm({ name:'', contact:'', description:'' });
+        setStatus('success');
+      } else { setStatus('error'); }
+    } catch { setStatus('error'); }
+    finally { setSubmitting(false); }
+  };
+
+  const inp = {
+    width:'100%',padding:'12px 16px',border:'1.5px solid #e2e8f0',
+    borderRadius:10,fontFamily:'Montserrat',fontSize:14,color:'#0f172a',
+    background:'#f8fafc',outline:'none',display:'block',boxSizing:'border-box',
+    transition:'border-color .2s, box-shadow .2s',
+  };
+  const lbl = { fontSize:12,fontWeight:700,color:'#374151',display:'block',marginBottom:6 };
+
+  const CONTACTS = [
+    { icon:<IconTelegram sz={20}/>, label:'Telegram', val:'@romanmuronchuk', href:'https://t.me/romanmuronchuk' },
+    { icon:<IconInsta sz={20}/>,    label:'Instagram', val:'roma.ai.pro',    href:'https://www.instagram.com/roma.ai.pro?igsh=eWdneW9zZjlxeTh1' },
+    { icon:<IconEmail sz={20}/>,    label:'Email',     val:'mironcukroman602@gmail.com', href:'mailto:mironcukroman602@gmail.com' },
+  ];
+
+  return (
+    <section ref={sRef} id="contact" className="sec-pad" style={{background:'#07101f',padding:'96px 24px'}}>
+      <div style={{maxWidth:1180,margin:'0 auto'}}>
+        <div className="reveal" style={{textAlign:'center',marginBottom:64}}>
+          <SectionLabel text="Контакти" light />
+          <SectionTitle text="Розпочніть проект сьогодні" light />
+          <p style={{fontSize:15,color:'#475569',marginTop:12}}>Розкажіть про задачу — я запропоную оптимальне рішення</p>
+        </div>
+
+        <div className="contact-layout" style={{display:'grid',gridTemplateColumns:'1fr 1.5fr',gap:56,alignItems:'start'}}>
+
+          {/* Contacts */}
+          <div className="reveal" style={{display:'flex',flexDirection:'column',gap:14}}>
+            {CONTACTS.map(c => (
+              <a key={c.label} href={c.href} target="_blank" rel="noopener noreferrer" className="contact-link"
+                style={{display:'flex',alignItems:'center',gap:14,textDecoration:'none',padding:'18px 20px',borderRadius:16,background:'rgba(255,255,255,.04)',border:'1px solid rgba(255,255,255,.07)'}}>
+                <div style={{width:44,height:44,borderRadius:12,background:'rgba(8,126,164,.2)',display:'flex',alignItems:'center',justifyContent:'center',color:'#38bdf8',flexShrink:0}}>
+                  {c.icon}
+                </div>
+                <div>
+                  <div style={{fontSize:11,color:'#475569',fontWeight:700,textTransform:'uppercase',letterSpacing:1}}>{c.label}</div>
+                  <div style={{fontSize:14,color:'#fff',fontWeight:600,marginTop:2}}>{c.val}</div>
+                </div>
+              </a>
+            ))}
+
+            <div style={{marginTop:8,padding:20,borderRadius:16,background:'rgba(8,126,164,.08)',border:'1px solid rgba(8,126,164,.2)'}}>
+              <div style={{color:'#38bdf8',fontSize:12,fontWeight:700,marginBottom:8,textTransform:'uppercase',letterSpacing:1}}>⏱ Час відповіді</div>
+              <div style={{color:'#64748b',fontSize:14,lineHeight:1.65}}>
+                Зазвичай відповідаю протягом кількох годин. Для термінових задач — Telegram.
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <div className="reveal delay-1">
+            <div className="form-box" style={{background:'#fff',borderRadius:20,padding:'36px 40px'}}>
+              {status === 'success' ? (
+                <div style={{textAlign:'center',padding:'16px 0'}}>
+                  <div style={{width:68,height:68,borderRadius:'50%',background:'#ecfdf5',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 20px',fontSize:28}}>✅</div>
+                  <h3 style={{fontSize:22,fontWeight:800,color:'#0f172a',margin:'0 0 10px'}}>Дякую, {savedName}!</h3>
+                  <p style={{color:'#64748b',lineHeight:1.65,marginBottom:24}}>Запит надіслано. Зв'яжусь найближчим часом.</p>
+                  <button onClick={() => setStatus('idle')}
+                    style={{border:`2px solid ${accent}`,background:'transparent',color:accent,padding:'10px 24px',borderRadius:9,fontFamily:'Montserrat',fontWeight:700,fontSize:14,cursor:'pointer'}}>
+                    Надіслати ще
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  {status === 'error' && (
+                    <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:10,padding:14,marginBottom:18,textAlign:'center'}}>
+                      <p style={{color:'#dc2626',fontSize:13,margin:'0 0 8px'}}>Помилка відправлення.</p>
+                      <a href={tgFallback()} target="_blank" rel="noopener noreferrer" style={{color:accent,fontWeight:700,fontSize:13}}>
+                        Надіслати через Telegram →
+                      </a>
+                    </div>
+                  )}
+                  <div style={{marginBottom:18}}>
+                    <label style={lbl}>Ім'я</label>
+                    <input className="form-input" style={inp} type="text" value={form.name} onChange={e=>setForm(p=>({...p,name:e.target.value}))} required disabled={submitting} placeholder="Ваше ім'я" />
+                  </div>
+                  <div style={{marginBottom:18}}>
+                    <label style={lbl}>Email / Telegram</label>
+                    <input className="form-input" style={inp} type="text" value={form.contact} onChange={e=>setForm(p=>({...p,contact:e.target.value}))} required disabled={submitting} placeholder="@username або email" />
+                  </div>
+                  <div style={{marginBottom:24}}>
+                    <label style={lbl}>Опис задачі</label>
+                    <textarea className="form-input" style={{...inp,resize:'vertical',minHeight:110}} value={form.description} onChange={e=>setForm(p=>({...p,description:e.target.value}))} required disabled={submitting} rows={4} placeholder="Розкажіть про вашу задачу..." />
+                  </div>
+                  <button type="submit" disabled={submitting}
+                    style={{
+                      width:'100%',padding:'15px 20px',
+                      background:submitting?'#94a3b8':`linear-gradient(135deg,${accent},#0ea5c9)`,
+                      color:'#fff',border:'none',borderRadius:10,
+                      fontFamily:'Montserrat',fontSize:15,fontWeight:700,
+                      cursor:submitting?'not-allowed':'pointer',
+                      boxShadow:submitting?'none':`0 8px 24px rgba(8,126,164,.35)`,
+                      transition:'opacity .2s, box-shadow .2s',
+                    }}>
+                    {submitting ? 'Відправляємо...' : 'Надіслати запит →'}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── App ── */
+const TWEAK_DEFAULTS = {
+  accentColor: '#087ea4',
+  showBadge: true,
+  cardStyle: 'shadow',
+};
+
+const App = () => {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const accent = t.accentColor;
+
+  const refs = {
+    about:   useRef(null),
+    cases:   useRef(null),
+    pricing: useRef(null),
+    contact: useRef(null),
+  };
+
+  const [active, setActive] = useState('');
+
+  useScrollReveal();
+
+  useEffect(() => {
+    const fn = () => {
+      const order = ['contact','pricing','cases','about'];
+      for (const key of order) {
+        const el = refs[key]?.current;
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= 90) { setActive(key); return; }
+      }
+      setActive('');
+    };
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const onNav = (key) => {
+    scrollTo(refs[key]?.current);
+    setActive(key);
+  };
+
+  return (
+    <div>
+      <Header onNav={onNav} active={active} accent={accent} />
+      <main>
+        <Hero onCTA={() => onNav('contact')} accent={accent} />
+        <About sRef={refs.about} accent={accent} />
+        <Cases sRef={refs.cases} accent={accent} />
+        <Pricing sRef={refs.pricing} onSelect={() => onNav('contact')} accent={accent} />
+        <Contact sRef={refs.contact} accent={accent} />
+      </main>
+      <footer style={{background:'#040a14',textAlign:'center',padding:'28px 24px',borderTop:'1px solid rgba(255,255,255,.04)'}}>
+        <p style={{color:'#1e293b',fontSize:13}}>© {new Date().getFullYear()} Roman Myronchuk. Усі права захищено.</p>
+      </footer>
+
+      <TweaksPanel>
+        <TweakSection label="Кольори" />
+        <TweakColor label="Акцентний колір" value={t.accentColor} onChange={v => setTweak('accentColor', v)} />
+        <TweakSection label="Вигляд" />
+        <TweakToggle label="Показувати AI бейдж" value={t.showBadge} onChange={v => setTweak('showBadge', v)} />
+        <TweakRadio label="Стиль карток" value={t.cardStyle} options={['shadow','border','flat']} onChange={v => setTweak('cardStyle', v)} />
+      </TweaksPanel>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
