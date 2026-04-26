@@ -13,6 +13,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 68px; }
     body { font-family: 'Montserrat', sans-serif; background: #fff; color: #0f172a; }
 
     /* ── Reveal animations ── */
@@ -610,11 +611,9 @@ const SectionTitle = ({ text, light }) => (
   </h2>
 );
 
-const scrollToSection = (key, offset=68) => {
+const scrollToSection = (key) => {
   const el = document.getElementById(key);
-  if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top, behavior: 'smooth' });
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 /* ─── useScrollReveal ── */
@@ -948,7 +947,6 @@ const Contact = ({ accent }) => {
       await fetch(WEBHOOK, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
       setSavedName(form.name);
