@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roman Myronchuk — AI Systems Architect</title>
+  <title>Roman Myronchuk — AI Systems & Full-Stack Architect</title>
+  <meta name="description" content="Проектування та розробка AI-систем, E-commerce платформ (Web & Telegram Mini Apps), інтеграцій із SalesDrive, Prom.ua, KeyCRM та автоматизації бізнес-процесів під ключ.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 68px; }
     body { font-family: 'Montserrat', sans-serif; background: #fff; color: #0f172a; }
 
     /* ── Reveal animations ── */
@@ -51,7 +53,7 @@
     }
     .case-card-wrap:hover {
       transform: translateY(-6px);
-      box-shadow: 0 24px 48px rgba(0,0,0,.11) !important;
+      box-shadow: 0 24px 48px rgba(15,23,42,.09) !important;
     }
 
     .tech-badge {
@@ -69,6 +71,77 @@
       cursor: default;
     }
     .tech-badge:hover { background: #087ea4; color: #fff; border-color: #087ea4; }
+
+    .case-stack-chip {
+      display: inline-flex;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 7px;
+      letter-spacing: 0.1px;
+    }
+
+    .case-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 13px;
+      border-radius: 9px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+    }
+    .case-link-primary {
+      background: #087ea4;
+      color: #fff;
+      border: 1px solid #087ea4;
+      box-shadow: 0 4px 12px rgba(8,126,164,.22);
+    }
+    .case-link-primary:hover {
+      background: #0369a1;
+      border-color: #0369a1;
+      transform: translateY(-1px);
+    }
+    .case-link-secondary {
+      background: #f8fafc;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .case-link-secondary:hover {
+      background: #f0f9ff;
+      color: #087ea4;
+      border-color: #7dd3fc;
+    }
+
+    .filter-pill {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      padding: 9px 18px;
+      border-radius: 100px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-pill:hover {
+      border-color: #7dd3fc;
+      color: #087ea4;
+    }
+    .filter-pill.active {
+      background: #087ea4;
+      border-color: #087ea4;
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(8,126,164,.25);
+    }
 
     /* ── Form ── */
     .form-input {
@@ -103,12 +176,42 @@
       transform: translateY(-3px);
     }
 
+    /* ── Modal ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(7, 16, 31, 0.72);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn .2s ease;
+    }
+    .modal-card {
+      background: #fff;
+      border-radius: 22px;
+      max-width: 720px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 36px;
+      position: relative;
+      box-shadow: 0 28px 80px rgba(0,0,0,.35);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
     /* ── Responsive ── */
 
     /* Tablet */
     @media (max-width: 1024px) {
-      .pricing-layout { grid-template-columns: 1fr !important; max-width: 480px; margin: 0 auto; }
+      .pricing-layout { grid-template-columns: 1fr !important; max-width: 520px; margin: 0 auto; }
       .pricing-popular-card { transform: none !important; }
+      .policy-grid { grid-template-columns: repeat(2, 1fr) !important; }
     }
 
     /* Mobile */
@@ -121,6 +224,7 @@
       .about-layout   { grid-template-columns: 1fr !important; gap: 40px !important; }
       .cases-layout   { grid-template-columns: 1fr !important; }
       .pricing-layout { grid-template-columns: 1fr !important; max-width: 100%; }
+      .policy-grid    { grid-template-columns: 1fr !important; }
       .contact-layout { grid-template-columns: 1fr !important; gap: 32px !important; }
       .pricing-popular-card { transform: none !important; }
 
@@ -151,6 +255,10 @@
       /* Tech badges smaller on mobile */
       .tech-badge { font-size: 11px !important; padding: 4px 10px !important; }
       .tech-grid { grid-template-columns: 1fr !important; }
+
+      /* Case card padding on mobile */
+      .case-card-inner { padding: 22px 18px !important; }
+      .modal-card { padding: 24px 18px !important; }
     }
 
     /* Extra small */
@@ -175,6 +283,7 @@
     .tag-ecom     { background:#fffbeb; color:#d97706; border:1px solid #fcd34d; }
     .tag-telegram { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
     .tag-data     { background:#fdf4ff; color:#9333ea; border:1px solid #e9d5ff; }
+    .tag-edtech   { background:#eef2ff; color:#4f46e5; border:1px solid #c7d2fe; }
   </style>
 </head>
 <body>
@@ -449,126 +558,285 @@ Object.assign(window, {
 
 <!-- Main app -->
 <script type="text/babel">
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect } = React;
 
 /* ─── Data ── */
+const CASE_CATEGORIES = [
+  { id: 'all',      label: 'Усі проекти' },
+  { id: 'ecom',     label: 'E-commerce & Web' },
+  { id: 'ai',       label: 'AI & Автоматизація' },
+  { id: 'analytics',label: 'Аналітика & EdTech' },
+];
+
 const CASES = [
   {
-    title: 'AI-Бот для прийому клієнтів 24/7',
-    desc:  'Комплексна система автоматизації продажів: від консультації до угоди в CRM.',
+    id: 'urban-trend-shop',
+    categories: ['ecom', 'ai'],
+    title: 'Urban Trend Shop — E-commerce Екосистема & Telegram Mini App',
+    desc: 'Повномасштабна платформа магазину одягу, що об’єднує публічний SEO-сайт, нативний Telegram Mini App, адмін-панель з аналітикою та 3 спеціалізовані боти.',
+    howItWorks: 'Клієнт відкриває магазин у браузері або Telegram (авторизація через криптографічний підпис initData) → обирає розмір/колір, відділення Нової Пошти та оплачує через WayForPay → машина станів (FSM) оновлює замовлення, а 3 боти (вітрина, підтримка, склад) синхронізують продажі та залишки.',
     features: [
-      'Миттєві відповіді та консультація по каталогу',
-      'Покроковий збір брифу на замовлення (8 параметрів)',
-      'Збереження лідів у PostgreSQL та KeyCRM',
-      'Визначення «гарячості» ліда та пам\'ять діалогу',
+      'Публічна SEO-вітрина + нативний Telegram Mini App із кошиком, обраним та варіантами товарів',
+      'Онлайн-оплата WayForPay (HMAC-MD5) та автоматичне створення ТТН Нової Пошти',
+      '3 боти в одному процесі: вітрина з рефералкою, мульти-менеджерський сапорт і списання зі складу за коротким SKU',
+      'Адмін-панель із воронкою продажів (Recharts), програмою лояльності (win-back купони) та AI-генерацією описів і звітів (GPT-4o-mini)',
     ],
-    tag: 'AI Sales', tagCls: 'tag-ai',
+    benefit: 'Єдиний контур онлайн та офлайн продажів без сторонніх CMS: миттєвий облік залишків за SKU, автоматичні win-back кампанії та скорочення часу оформлення карток товарів у 5 разів.',
+    stack: ['React 18', 'Flask 3', 'PostgreSQL 16', 'aiogram 3', 'WayForPay', 'Nova Poshta API', 'OpenAI GPT-4o-mini', 'Docker + Caddy'],
+    links: [
+      { label: 'Telegram Бот & Mini App', href: 'https://t.me/URBAN_TREND_SHOP_BOT', type: 'tg' },
+      { label: 'Відкрити сайт', href: 'https://urbantrend.com.ua', type: 'live' },
+    ],
+    tag: 'E-commerce & TMA', tagCls: 'tag-telegram',
+    details: {
+      architecture: 'Шестисервісний Docker Compose стек на Hostinger VPS за реверс-проксі Caddy: PostgreSQL 16 (автоміграції з advisory lock), Flask API, React SPA, виділений APScheduler-сервіс для щоденних лояльність-кампаній та об’єднаний процес трьох aiogram 3 ботів.',
+      highlights: [
+        'Ідемпотентна машина станів замовлень та оплат (захист від дублів вебхуків WayForPay)',
+        'Структурована AI-генерація описів за Pydantic-схемою (матеріали, крій, догляд, переваги)',
+        'Автоматична конвертація завантажених фото у WebP + генерація мініатюр 320px',
+        'Трирівнева система лояльності (Newcomer / Regular / VIP), реферальні купони та авто-реактивація через 60 днів',
+      ],
+    },
   },
   {
-    title: 'Urban Trend — Auto Description Generator',
-    desc:  'Автоматизація каталогізації товарів для інтернет-магазину за допомогою AI-зору.',
+    id: 'my-prom',
+    categories: ['ecom', 'ai'],
+    title: 'Мій Prom — B2B-платформа підготовки каталогу та синхронізації з Prom.ua',
+    desc: 'Автономний сервіс імпорту таблиць постачальників, доказового AI-збагачення карток товарів та автоматизованої публікації на маркетплейс Prom.ua.',
+    howItWorks: 'Власник завантажує CSV/XLSX постачальника → система безпечно парсить рядки та нормалізує фото у WebP/JPG → AI (OpenAI Structured Outputs) генерує українські SEO-описи суворо за підтвердженими фактами → після exact-hash погодження воркер синхронізує каталог і публікує фіди (XLSX/CSV/YML) та оновлення в Prom API.',
     features: [
-      'Аналіз фото товару через GPT-4o Vision',
-      'Генерація продаючих описів для Instagram',
-      'Автоматичне додавання карток у Google Sheets',
-      'AI-агент для управління базою (SQL через текст)',
+      'Безпечний імпорт прайсів постачальників (CSV/XLSX) із версіонованими шаблонами мапінгу колонок',
+      'Нормалізація медіа у WebP/JPG із захистом від SSRF та дедуплікацією за SHA-256',
+      'Доказове AI-збагачення (OpenAI Responses API): генерація заголовків, описів і пошукових запитів без права змінювати ціну чи факти',
+      'Канонічний генератор експортів (XLSX/CSV/YML з автоматичною націнкою) та синхронізація з Prom Public API + Telegram-сповіщення',
     ],
-    tag: 'E-commerce', tagCls: 'tag-ecom',
+    benefit: 'Знімає ручну рутину контент-менеджерів при роботі з прайсами постачальників і на 100% захищає бізнес від AI-галюцинацій у цінах, залишках та характеристиках завдяки криптографічній фіксації ревізій.',
+    stack: ['Python 3.12', 'Flask', 'PostgreSQL', 'React', 'OpenAI Structured Outputs', 'Prom.ua API', 'Docker Compose'],
+    links: [
+      { label: 'Запитати демо B2B-консолі', href: 'https://t.me/romanmuronchuk?text=' + encodeURIComponent('Привіт! Цікавить демонстрація B2B-платформи «Мій Prom».'), type: 'tg' },
+      { label: 'Магазин-донор у Telegram', href: 'https://t.me/URBAN_TREND_SHOP_BOT', type: 'live' },
+    ],
+    tag: 'B2B SaaS & AI Catalog', tagCls: 'tag-ecom',
+    details: {
+      architecture: 'Ізольована чотирисервісна архітектура (PostgreSQL, Backend, Leased Queue Worker, React Owner Console). Будь-які структурні зміни проходять через exact-hash схвалення власника, а швидкі зміни цін і залишків оновлюються через edit_by_external_id.',
+      highlights: [
+        'Трирівнева система пріоритетів доказів (таблиця постачальника, верифікована бірка, технічні метадані фото)',
+        'Сувора заборона AI-моделі модифікувати ідентифікатори, категорії, ціни, наявність чи порядок фото',
+        'Автоматичний перерахунок роздрібної ціни та безпечне приховування товарів при нульовому залишку',
+        'Гарантована доставка сповіщень власнику в Telegram з контролем станів',
+      ],
+    },
   },
   {
-    title: 'Telegram Mini App Магазин Одягу',
-    desc:  'Повноцінний інтернет-магазин всередині Telegram з адмін-панеллю.',
+    id: 'inventory-analytics-ai',
+    categories: ['ai', 'analytics'],
+    title: 'AI-Асистент аналітики складу та закупівель (SalesDrive + Telegram)',
+    desc: 'Інтелектуальна система управління запасами та прогнозування закупівель для товарного бізнесу (до 1 500 активних SKU в 11 товарних групах).',
+    howItWorks: 'Сервіс щодня синхронізує каталог, залишки (YML/XML) та замовлення із SalesDrive API → аналітичне ядро рахує реальну швидкість продажів за 7 і 30 днів (виключаючи дні Out-of-Stock) та віднімає товар у дорозі → формує точний план дозамовлення й 3-вкладковий XLSX-файл у Telegram.',
     features: [
-      'Зручний інтерфейс каталогу та кошика',
-      'Інтеграція онлайн-оплат',
-      'Автоматичне оформлення доставки (Нова Пошта)',
-      'Зручна адмін-панель для управління товарами',
+      'Чистий розрахунок швидкості продажів (V7d, V30d) із автоматичним виключенням днів порожнього складу (Out-of-Stock)',
+      'ABC-класифікація асортименту, детекція сплесків попиту (🔥) та виявлення замороженого капіталу в неліквіді (❄️)',
+      'Дворівневий розрахунок закупівель за артикулами та групами з урахуванням MOQ, страхового запасу й поставок у дорозі (IN_TRANSIT)',
+      'Двосторонній обмін 3-вкладковими XLSX-бланками для власника й постачальника + голосовий/текстовий AI-асистент (GPT-4o-mini + Whisper-1)',
     ],
-    tag: 'Telegram App', tagCls: 'tag-telegram',
+    benefit: 'Усуває втрату виручки через дефіцит хітів продажів (клас A), виключає подвійні замовлення товарів у дорозі та скорочує планування закупівлі з кількох годин до 5 хвилин.',
+    stack: ['Python', 'SalesDrive API', 'PostgreSQL / SQLite', 'Telegram Bot API', 'OpenAI + Whisper', 'OpenPyXL (XLSX)', 'Docker'],
+    links: [
+      { label: 'Запитати демо в Telegram', href: 'https://t.me/romanmuronchuk?text=' + encodeURIComponent('Привіт! Цікавить демонстрація AI-асистента аналітики складу та закупівель (SalesDrive).'), type: 'tg' },
+    ],
+    tag: 'AI & Inventory Analytics', tagCls: 'tag-data',
+    details: {
+      architecture: 'Модульний Python-сервіс із реляційною БД (щоденні зрізи залишків, історія руху, машина станів поставок DRAFT → IN_TRANSIT → PARTIALLY_RECEIVED → COMPLETED), конектором до SalesDrive CRM та інтерактивним Telegram-ботом власника.',
+      highlights: [
+        'Врахування статусів Продаж / Резерв / Відмова / Повернення без подвійного списання',
+        'Автоматичний парсинг скоригованих власником кількостей прямо з відредагованого XLSX-файлу',
+        'Контроль прострочених поставок та часткових надходжень на склад',
+        'Голосові запити власника у Telegram через OpenAI Whisper-1 із поясненням причин кожної рекомендації',
+      ],
+    },
   },
   {
-    title: 'Система пошуку трендових товарів',
-    desc:  'Аналітичний інструмент для пошуку перспективних товарів для дропшипінгу чи e-commerce.',
+    id: 'gentlemen-craft-catalog',
+    categories: ['ecom'],
+    title: 'GENTLMEN CRAFT — Веб-каталог нард та шахів ручної роботи',
+    desc: 'Швидкий адаптивний SPA-каталог преміальних виробів ручної роботи (210+ позицій у 4 категоріях) із миттєвим переходом до замовлення у месенджерах.',
+    howItWorks: 'Клієнт переходить із реклами у швидкий мобільний каталог → фільтрує скляні чи дерев’яні нарди, шахи або фішки → переглядає деталізовані фото з миттєвим завантаженням (WebP/AVIF) та в 1 клік відкриває діалог у Telegram або Viber майстра з обраною моделлю.',
     features: [
-      'Моніторинг трендів у TikTok',
-      'Аналіз актуальності на українському ринку',
-      'Автоматичний пошук постачальників у Китаї',
-      'Збір даних для прийняття рішень',
+      'Структурований каталог на 210+ моделей (63 скляні, 89 дерев’яних, 16 шахових комплектів, 42 набори фішок)',
+      'Автоматичний пайплайн оптимізації зображень у WebP та AVIF із довготривалим immutable-кешуванням',
+      'Прямі SEO-посилання на кожну модель (/models/:slug) із підтримкою SPA-маршрутизації на Netlify CDN',
+      'Конверсійні картки товарів із вибором розмірів та прямим переходом у Telegram і Viber без втрати лідів',
     ],
-    tag: 'Data Analytics', tagCls: 'tag-data',
+    benefit: 'Миттєве завантаження сотень високоякісних фото навіть при слабкому мобільному інтернеті та максимальна конверсія рекламного трафіку напряму в замовлення.',
+    stack: ['React 18', 'Vite', 'WebP / AVIF Pipeline', 'SPA Routing', 'Netlify CDN'],
+    links: [
+      { label: 'Відкрити живий каталог', href: 'https://nardy-katalog.netlify.app/', type: 'live' },
+    ],
+    tag: 'Web Catalog / E-commerce', tagCls: 'tag-ecom',
+    details: {
+      architecture: 'Клієнтський SPA-додаток на React + Vite з кастомним генератором оптимізованих графічних асетів (WebP/AVIF), системою версійного cache-busting та конфігурацією миттєвої доставки через глобальний CDN Netlify.',
+      highlights: [
+        'Автоматична перевірка цілісності каталогу та зображень перед кожним білдом (npm run validate)',
+        'Індивідуальний блок замовлення кастомного дизайну з власним фото або гербом клієнта',
+        'Адаптований Mobile-First UX під трафік з Instagram, TikTok та Google Ads',
+      ],
+    },
+  },
+  {
+    id: 'edki-nuclear-prep',
+    categories: ['analytics'],
+    title: 'ЄДКІ «Атомна енергетика» — Навчальний комплекс і симулятор іспиту (PWA & Telegram Bot)',
+    desc: 'Автономний веб-додаток (PWA) у зв’язці з Telegram-ботом та верифікована інженерна база знань для підготовки до Єдиного державного кваліфікаційного іспиту (спеціальність 143).',
+    howItWorks: 'Python-пайплайн екстракції оцифрував білети, конспекти та регламенти (НРБУ-97, ВВЕР-1000) у структуровану JSON-базу → користувач запускає симулятор через Telegram-бота або веб-додаток, проходить іспитові вибірки на 100 питань, відпрацьовує помилки та зберігає прогрес.',
+    features: [
+      'Офіційний симулятор іспиту: 100 випадкових завдань у точних пропорціях 6 модулів, таймер 120 хв та підсумковий протокол',
+      'Тематичний тренажер із миттєвим науковим обґрунтуванням, посиланням на стандарти та пошуком за ключовими словами',
+      'Режим 3D флеш-карток інтервального повторення та автоматичний банк «Робота над помилками» з лічильником засвоєння',
+      'Електронний інженерний довідник («Шпаргалка ЄДКІ»: таблиці реакторів ВВЕР/РБМК, турбін К-1000, формули) та JSON-бекап прогресу',
+    ],
+    benefit: 'Миттєвий доступ зі смартфона через Telegram-бота та автономний PWA-інтерфейс, систематизація сотень сторінок технічної документації в єдиний інтерактивний тренажер із персональною аналітикою готовності.',
+    stack: ['React 18', 'TypeScript', 'Tailwind CSS', 'Telegram Bot / WebApp', 'Vite 6', 'Python Data Pipeline'],
+    links: [
+      { label: 'Відкрити бот-тренажер', href: 'https://t.me/yedki_hub_test_bot', type: 'tg' },
+    ],
+    tag: 'EdTech / PWA & Bot', tagCls: 'tag-edtech',
+    details: {
+      architecture: 'Offline-first SPA/PWA архітектура на React 18 + TypeScript + Tailwind CSS із доступом через Telegram-бота (@yedki_hub_test_bot), повною типізацією банку завдань, аналітичним дашбордом індексу готовності та портативним експортом/імпортом стану у JSON.',
+      highlights: [
+        'Верифікація відповідей за офіційними нормативами (НРБУ-97, НП 306.2.141-2008, регламенти ВВЕР-1000)',
+        'Інтерактивна навігаційна сітка на 100 питань із прапорцями для перевірки та кольоровою індикацією',
+        'Детальна діаграма успішності в розрізі 6 спеціалізованих модулів після кожної спроби',
+      ],
+    },
+  },
+  {
+    id: 'ai-sales-bot-24-7',
+    categories: ['ai'],
+    title: 'AI-Бот для прийому клієнтів 24/7 та кваліфікації лідів у CRM',
+    desc: 'Комплексна система автоматизації першої лінії продажів: від миттєвої консультації за каталогом до створеної угоди в KeyCRM.',
+    howItWorks: 'Клієнт пише у бот або месенджер у будь-який час доби → AI-агент консультує по каталогу та покроково збирає бриф із 8 параметрів замовлення → оцінює «гарячість» ліда, зберігає історію в PostgreSQL і автоматично створює картку угоди в KeyCRM для менеджера.',
+    features: [
+      'Миттєві природні відповіді 24/7 та точна консультація за актуальним каталогом і прайсом',
+      'Покроковий ненав’язливий збір брифу на замовлення (8 ключових параметрів клієнта)',
+      'Автоматичний запис лідів та повної історії переписки в PostgreSQL і KeyCRM',
+      'Інтелектуальний скоринг «гарячості» ліда та миттєве сповіщення менеджера про готового до оплати клієнта',
+    ],
+    benefit: 'Жодного втраченого звернення у неробочий час, 3-кратне скорочення навантаження на менеджерів та передача у відділ продажів уже кваліфікованих клієнтів із готовим брифом.',
+    stack: ['OpenAI API', 'Python / n8n', 'PostgreSQL', 'KeyCRM API', 'Telegram Bot API'],
+    links: [
+      { label: 'Обговорити подібний бот', href: '#contact', type: 'internal' },
+    ],
+    tag: 'AI Sales & CRM', tagCls: 'tag-ai',
+    details: {
+      architecture: 'Інтеграційний контур на базі LLM-агента з довготривалою пам’яттю діалогу в PostgreSQL, структурованою екстракцією параметрів замовлення та двостороннім вебхук-обміном із KeyCRM.',
+      highlights: [
+        'Контекстна пам’ять діалогу та захист від нецільових запитів',
+        'Автоматична передача діалогу живому менеджеру при складних нестандартних запитах',
+        'Прозора аналітика конверсії діалогів у підтверджені ліди',
+      ],
+    },
   },
 ];
 
 const PLANS = [
   {
     name: 'Start System', price: '$250–599',
-    sub: 'Для старту автоматизації',
+    sub: 'Для швидкого старту та оцифрування',
     features: [
-      'Базовий Telegram-бот або Mini App',
-      'Автоматизація 1-2 бізнес-процесів',
-      'Синхронізація з Google Sheets / Airtable',
-      'Налаштування системних сповіщень',
+      'Сучасний веб-каталог (SPA / PWA) або базовий Telegram-бот',
+      'Оптимізація швидкодії (WebP/AVIF), SEO-маршрутизація та деплой',
+      'Автоматизація 1–2 ключових бізнес-процесів',
+      'Синхронізація заявок із Telegram, Viber, Google Sheets / Airtable',
     ],
   },
   {
     name: 'Business Core', price: '$900–1500',
-    sub: 'Комплексне рішення для бізнесу',
+    sub: 'Комплексне рішення для бізнесу (10–15 роб. днів)',
     features: [
-      'Комплексна AI-система прийому заявок',
-      'Інтеграція з CRM (KeyCRM) та БД (PostgreSQL)',
-      'AI-генерація контенту (GPT-4o Vision)',
-      'Автоматизація доставки та оплат',
-      'Модуль аналітики та кваліфікації лідів',
+      'AI-система аналітики складу й закупівель або прийому заявок 24/7',
+      'Глибока інтеграція з CRM (SalesDrive, KeyCRM) та БД (PostgreSQL)',
+      'Голосові й текстові AI-асистенти власника (GPT-4o + Whisper)',
+      'Автогенерація XLSX-звітів, розрахунок MOQ та контроль поставок',
+      'Підключення онлайн-оплат (WayForPay) і доставки (Нова Пошта API)',
     ],
     popular: true,
   },
   {
     name: 'Enterprise Logic', price: 'від $2000',
-    sub: 'Повна цифрова екосистема',
+    sub: 'Повна цифрова екосистема під ключ',
     features: [
-      'Повноцінна цифрова екосистема',
-      'Складні AI-агенти (LangChain, SQL-запити)',
-      'Системи аналітики трендів (TikTok, Китай)',
-      'Кастомні веб-додатки та адмін-панелі',
-      'Масштабована архітектура під high-load',
+      'E-commerce екосистема: публічний сайт + Telegram Mini App + мульти-бот',
+      'B2B-платформи синхронізації прайсів постачальників та Prom.ua',
+      'Доказове AI-збагачення каталогу без галюцинацій (Structured Outputs)',
+      'Кастомні адмін-панелі з воронками продажів, когортами та системою лояльності',
+      'Захищена Docker-інфраструктура (PostgreSQL, Caddy, фонові воркери)',
     ],
+  },
+];
+
+const COOPERATION_POLICY = [
+  {
+    title: 'Фіксація ТЗ на старті',
+    desc: 'Погоджуємо чіткі правила розрахунків, структуру даних та прозорі критерії приймання до початку розробки.',
+  },
+  {
+    title: 'Поетапна оплата',
+    desc: 'Проект ділиться на 3–4 логічні етапи. Ви оплачуєте кожен етап після демонстрації та перевірки результату.',
+  },
+  {
+    title: '30 днів гарантії',
+    desc: 'Безкоштовна технічна підтримка та усунення будь-яких зауважень у межах погодженого функціоналу після запуску.',
+  },
+  {
+    title: '100% передача прав і коду',
+    desc: 'Передаю чистий репозиторій, Docker-конфігурацію без зашитих секретів, документацію та всі доступи власнику.',
   },
 ];
 
 const TECH_CATEGORIES = [
   {
     label: 'AI-моделі та LLM',
-    items: ['Claude', 'Claude Code', 'GPT', 'Gemini'],
+    items: ['OpenAI GPT-4o', 'Whisper-1', 'Structured Outputs', 'Claude', 'Claude Code', 'Gemini', 'RAG'],
   },
   {
-    label: 'AI-середовища та IDE',
-    items: ['Cursor', 'VS Code', 'Antigravity', 'Lovable'],
+    label: 'Backend & Боти',
+    items: ['Python 3.12', 'Flask', 'aiogram 3', 'REST API', 'Webhooks', 'FSM / Workers'],
   },
   {
-    label: 'Автоматизація',
-    items: ['Make', 'n8n'],
+    label: 'Frontend & Mini Apps',
+    items: ['React 18', 'TypeScript', 'Tailwind CSS', 'Vite', 'Telegram Mini Apps', 'Recharts', 'PWA'],
   },
   {
-    label: 'Бази даних',
-    items: ['PostgreSQL', 'Supabase', 'Airtable', 'MongoDB', 'MySQL', 'Redis', 'Firebase', 'Notion DB', 'Pinecone', 'RAG'],
+    label: 'Бази даних & Файли',
+    items: ['PostgreSQL 16', 'SQLite WAL', 'Supabase', 'Airtable', 'Redis', 'OpenPyXL (XLSX)', 'YML / XML'],
   },
   {
-    label: 'API Integration',
-    items: ['REST API', 'Webhooks', 'Telegram Bot API', 'Google API'],
+    label: 'E-commerce & CRM',
+    items: ['SalesDrive API', 'Prom.ua API', 'KeyCRM', 'WayForPay', 'Нова Пошта API', 'Google Sheets API'],
   },
   {
-    label: 'Інфраструктура',
-    items: ['Vercel', 'Railway', 'Docker'],
+    label: 'Автоматизація & DevOps',
+    items: ['Docker Compose', 'Caddy', 'Nginx', 'Make', 'n8n', 'Netlify', 'Vercel', 'Hostinger VPS'],
   },
 ];
 
 const STATS = [['15+','Завершених проектів'],['10+','Задоволених клієнтів'],['3×','Прискорення процесів']];
-const WEBHOOK = 'https://n8n.myproject.pp.ua/webhook-test/b591e01e-c6ff-4fcf-843d-28cb282f8fba';
+const WEBHOOK = 'https://n8n.myproject.pp.ua/webhook/b591e01e-c6ff-4fcf-843d-28cb282f8fba';
 
 /* ─── Icons ── */
 const IconCheck = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:2}}>
     <path d="M5 13l4 4L19 7"/>
+  </svg>
+);
+const IconExternal = ({ sz=14 }) => (
+  <svg width={sz} height={sz} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+  </svg>
+);
+const IconGithub = ({ sz=14 }) => (
+  <svg width={sz} height={sz} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
   </svg>
 );
 const IconTelegram = ({ sz=22 }) => (
@@ -610,21 +878,20 @@ const SectionTitle = ({ text, light }) => (
   </h2>
 );
 
-const scrollTo = (el, offset=68) => {
-  if (!el) return;
-  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
-  window.scrollTo({ top, behavior:'smooth' });
+const scrollToSection = (key) => {
+  const el = document.getElementById(key);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 /* ─── useScrollReveal ── */
-const useScrollReveal = () => {
+const useScrollReveal = (dep) => {
   useEffect(() => {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.06 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
     return () => obs.disconnect();
-  }, []);
+  }, [dep]);
 };
 
 /* ─── Header ── */
@@ -665,7 +932,7 @@ const Header = ({ onNav, active, accent }) => {
 
         <a href="#" style={{textDecoration:'none',display:'flex',alignItems:'baseline',gap:8}}>
           <span style={{fontWeight:900,fontSize:17,color:'#0f172a',letterSpacing:'-0.5px'}}>Roman Myronchuk</span>
-          <span style={{fontWeight:600,fontSize:12,color:accent,letterSpacing:0}} className="desktop-only">— AI Systems Architect</span>
+          <span style={{fontWeight:600,fontSize:12,color:accent,letterSpacing:0}} className="desktop-only">— AI Systems & Full-Stack Architect</span>
         </a>
 
         {/* Desktop nav */}
@@ -706,10 +973,10 @@ const Header = ({ onNav, active, accent }) => {
 };
 
 /* ─── Hero ── */
-const Hero = ({ onCTA, accent }) => (
+const Hero = ({ onCTA, onCases, accent }) => (
   <section className="hero-bg" style={{minHeight:'calc(100vh - 68px)',display:'flex',alignItems:'center'}}>
     <div className="hero-inner" style={{maxWidth:1180,margin:'0 auto',padding:'72px 24px',width:'100%'}}>
-      <div className="hero-layout" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:64,alignItems:'center'}}>
+      <div className="hero-layout" style={{display:'grid',gridTemplateColumns:'1.15fr 0.85fr',gap:56,alignItems:'center'}}>
 
         {/* Text */}
         <div>
@@ -718,39 +985,46 @@ const Hero = ({ onCTA, accent }) => (
             <span style={{color:'#7dd3fc',fontSize:12,fontWeight:700}}>Доступний для нових проектів</span>
           </div>
 
-          <h1 style={{fontSize:'clamp(34px,4.5vw,60px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'-1.5px',margin:0}}>
+          <h1 style={{fontSize:'clamp(32px,4.3vw,56px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'-1.5px',margin:0}}>
             Проектую та будую<br/>
-            <span className="gradient-text">AI-системи</span><br/>
-            для бізнесу
+            <span className="gradient-text">AI-системи та E-commerce</span><br/>
+            платформи для бізнесу
           </h1>
 
-          <p style={{marginTop:24,fontSize:17,color:'#94a3b8',lineHeight:1.75,maxWidth:460}}>
-            Розробляю кастомну архітектуру автоматизації на базі Make, n8n та Cursor. Перетворюю хаос ручних процесів на чіткі масштабовані алгоритми.
+          <p style={{marginTop:24,fontSize:16,color:'#94a3b8',lineHeight:1.75,maxWidth:540}}>
+            Розробляю кастомні E-commerce екосистеми (Web & Telegram Mini Apps), AI-асистентів аналітики складу й закупівель, B2B-синхронізацію з CRM (SalesDrive, KeyCRM, Prom.ua) та автоматизацію процесів під ключ.
           </p>
 
-          <div className="hero-btns" style={{display:'flex',gap:14,marginTop:40,flexWrap:'wrap'}}>
+          <div className="hero-btns" style={{display:'flex',gap:14,marginTop:38,flexWrap:'wrap'}}>
             <button onClick={onCTA}
-              style={{background:`linear-gradient(135deg, ${accent} 0%, #0ea5c9 100%)`,color:'#fff',border:'none',padding:'15px 32px',borderRadius:10,fontFamily:'Montserrat',fontSize:15,fontWeight:700,cursor:'pointer',boxShadow:`0 8px 28px rgba(8,126,164,.45)`,transition:'transform .25s, box-shadow .25s'}}
+              style={{background:`linear-gradient(135deg, ${accent} 0%, #0ea5c9 100%)`,color:'#fff',border:'none',padding:'15px 30px',borderRadius:10,fontFamily:'Montserrat',fontSize:15,fontWeight:700,cursor:'pointer',boxShadow:`0 8px 28px rgba(8,126,164,.45)`,transition:'transform .25s, box-shadow .25s'}}
               onMouseEnter={e=>{e.target.style.transform='translateY(-2px)';e.target.style.boxShadow='0 12px 36px rgba(8,126,164,.55)';}}
               onMouseLeave={e=>{e.target.style.transform='none';e.target.style.boxShadow=`0 8px 28px rgba(8,126,164,.45)`;}}
             >
               Обговорити проект →
             </button>
-            <a href="https://t.me/romanmuronchuk" target="_blank" rel="noopener noreferrer"
-              style={{display:'inline-flex',alignItems:'center',gap:8,background:'rgba(255,255,255,.07)',color:'#fff',border:'1px solid rgba(255,255,255,.15)',padding:'15px 26px',borderRadius:10,fontSize:15,fontWeight:600,textDecoration:'none',fontFamily:'Montserrat',transition:'background .2s'}}
+            <button onClick={onCases}
+              style={{background:'rgba(255,255,255,.07)',color:'#fff',border:'1px solid rgba(255,255,255,.16)',padding:'15px 24px',borderRadius:10,fontSize:15,fontWeight:600,fontFamily:'Montserrat',cursor:'pointer',transition:'background .2s'}}
               onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,.13)'}
               onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,.07)'}
+            >
+              Переглянути кейси
+            </button>
+            <a href="https://t.me/romanmuronchuk" target="_blank" rel="noopener noreferrer"
+              style={{display:'inline-flex',alignItems:'center',gap:8,background:'rgba(56,189,248,.1)',color:'#7dd3fc',border:'1px solid rgba(56,189,248,.25)',padding:'15px 22px',borderRadius:10,fontSize:15,fontWeight:600,textDecoration:'none',fontFamily:'Montserrat',transition:'background .2s'}}
+              onMouseEnter={e=>e.currentTarget.style.background='rgba(56,189,248,.18)'}
+              onMouseLeave={e=>e.currentTarget.style.background='rgba(56,189,248,.1)'}
             >
               <IconTelegram sz={18}/> Telegram
             </a>
           </div>
 
           {/* Stats */}
-          <div className="hero-stats" style={{display:'flex',gap:40,marginTop:56,paddingTop:40,borderTop:'1px solid rgba(255,255,255,.07)',flexWrap:'wrap'}}>
+          <div className="hero-stats" style={{display:'flex',gap:40,marginTop:52,paddingTop:36,borderTop:'1px solid rgba(255,255,255,.07)',flexWrap:'wrap'}}>
             {STATS.map(([val,lbl],i) => (
               <div key={i}>
                 <div style={{fontSize:34,fontWeight:900,color:'#fff',letterSpacing:'-1px'}}>{val}</div>
-                <div style={{fontSize:12,color:'#475569',marginTop:4,fontWeight:600}}>{lbl}</div>
+                <div style={{fontSize:12,color:'#64748b',marginTop:4,fontWeight:600}}>{lbl}</div>
               </div>
             ))}
           </div>
@@ -772,25 +1046,25 @@ const Hero = ({ onCTA, accent }) => (
 );
 
 /* ─── About ── */
-const About = ({ sRef, accent }) => (
-  <section ref={sRef} id="about" className="sec-pad" style={{background:'#fff',padding:'96px 24px'}}>
+const About = ({ accent }) => (
+  <section id="about" className="sec-pad" style={{background:'#fff',padding:'96px 24px'}}>
     <div style={{maxWidth:1180,margin:'0 auto'}}>
       <div className="reveal" style={{textAlign:'center',marginBottom:64}}>
         <SectionLabel text="Про мене" />
         <SectionTitle text="Будую цифрову архітектуру бізнесу" />
       </div>
 
-      <div className="about-layout" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:64,alignItems:'start'}}>
+      <div className="about-layout" style={{display:'grid',gridTemplateColumns:'1fr 1.15fr',gap:56,alignItems:'start'}}>
         <div className="reveal">
           <p style={{fontSize:16,color:'#475569',lineHeight:1.85,marginBottom:20}}>
-            Я не просто налаштовую інструменти — я будую цифрову архітектуру бізнесу. Моя спеціалізація — розробка кастомних систем на базі AI, Make, n8n та Cursor.
+            Я не просто налаштовую окремі інструменти — я проектую та розробляю цілісну цифрову архітектуру бізнесу: від клієнтської вітрини чи Telegram Mini App до серверної логіки, бази даних та AI-аналітики.
           </p>
-          <p style={{fontSize:16,color:'#475569',lineHeight:1.85,marginBottom:36}}>
-            Перетворюю хаос у заявках, документах та фінансах на чіткі автоматизовані алгоритми, повертаючи власникам контроль над процесами та час для стратегічного розвитку.
+          <p style={{fontSize:16,color:'#475569',lineHeight:1.85,marginBottom:32}}>
+            Перетворюю хаос у таблицях постачальників, залишках складу, заявках і фінансах на чіткі детерміновані алгоритми, повертаючи власникам повний контроль над операційкою та час для масштабування.
           </p>
 
           {/* Mini stats */}
-          <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
+          <div style={{display:'flex',gap:14,flexWrap:'wrap',marginBottom:28}}>
             {[['15+','Проектів'],['10+','Клієнтів'],['3×','Avg ROI']].map(([v,l]) => (
               <div key={l} style={{flex:1,minWidth:90,textAlign:'center',background:'#f0f9ff',borderRadius:14,padding:'18px 12px',border:'1px solid #bae6fd'}}>
                 <div style={{fontSize:26,fontWeight:900,color:accent}}>{v}</div>
@@ -798,69 +1072,274 @@ const About = ({ sRef, accent }) => (
               </div>
             ))}
           </div>
+
+          <div className="approach-box" style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:16,padding:24}}>
+            <div style={{fontSize:13,fontWeight:800,color:'#0f172a',marginBottom:16}}>Що відрізняє мій підхід:</div>
+            {[
+              'Full-Stack реалізація: Python (Flask, aiogram), React/TypeScript, PostgreSQL, Docker',
+              'Доказовий AI без галюцинацій у цінах, залишках чи бізнес-показниках',
+              'Глибока інтеграція з українською інфраструктурою (SalesDrive, Prom.ua, KeyCRM, WayForPay, Нова Пошта)',
+              'Чистий код, криптографічний захист даних та прозора звітність для власника в Telegram та XLSX',
+            ].map((item,i) => (
+              <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:12,color:'#475569',fontSize:13.5,lineHeight:1.55}}>
+                <span style={{color:accent}}><IconCheck /></span>{item}
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="reveal delay-1">
           <div style={{fontSize:11,fontWeight:800,color:'#0f172a',letterSpacing:2.5,textTransform:'uppercase',marginBottom:16}}>Технологічний стек</div>
-          <div className="tech-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10,marginBottom:28}}>
+          <div className="tech-grid" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12}}>
             {TECH_CATEGORIES.map(cat => (
-              <div key={cat.label} style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:14,padding:'14px 16px'}}>
-                <div style={{fontSize:10,fontWeight:800,color:'#0f172a',letterSpacing:1.5,textTransform:'uppercase',marginBottom:9}}>{cat.label}</div>
+              <div key={cat.label} style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:14,padding:'15px 16px'}}>
+                <div style={{fontSize:10,fontWeight:800,color:'#0f172a',letterSpacing:1.5,textTransform:'uppercase',marginBottom:10}}>{cat.label}</div>
                 <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
                   {cat.items.map(t => <span key={t} className="tech-badge">{t}</span>)}
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="approach-box" style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:16,padding:24}}>
-            <div style={{fontSize:13,fontWeight:800,color:'#0f172a',marginBottom:16}}>Що відрізняє мій підхід:</div>
-            {['Проектування AI-архітектур з нуля','Інтеграція різнорідних систем в єдиний потік','Автоматизація продажів та обробки заявок','Розробка Telegram Mini Apps та ботів'].map((item,i) => (
-              <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:13,color:'#475569',fontSize:14}}>
-                <span style={{color:accent}}><IconCheck /></span>{item}
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
   </section>
 );
 
+/* ─── Case Modal ── */
+const CaseModal = ({ item, onClose, onNavContact, accent }) => {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  if (!item) return null;
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal-card" onClick={e => e.stopPropagation()}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:16,marginBottom:16}}>
+          <span className={item.tagCls} style={{fontSize:11,fontWeight:700,padding:'5px 13px',borderRadius:100,display:'inline-block'}}>
+            {item.tag}
+          </span>
+          <button onClick={onClose} aria-label="Закрити"
+            style={{background:'#f1f5f9',border:'none',width:34,height:34,borderRadius:10,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',color:'#475569'}}>
+            <IconX />
+          </button>
+        </div>
+
+        <h3 style={{fontSize:22,fontWeight:900,color:'#0f172a',lineHeight:1.25,marginBottom:12}}>{item.title}</h3>
+        <p style={{fontSize:14,color:'#475569',lineHeight:1.7,marginBottom:20}}>{item.desc}</p>
+
+        {/* How it works */}
+        <div style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:14,padding:'16px 18px',marginBottom:18}}>
+          <div style={{fontSize:11,fontWeight:800,color:accent,textTransform:'uppercase',letterSpacing:1.5,marginBottom:6}}>⚙️ Як працює система</div>
+          <div style={{fontSize:13.5,color:'#334155',lineHeight:1.65}}>{item.howItWorks}</div>
+        </div>
+
+        {/* Architecture details */}
+        {item.details && (
+          <div style={{background:'#f0f9ff',border:'1px solid #bae6fd',borderRadius:14,padding:'16px 18px',marginBottom:18}}>
+            <div style={{fontSize:11,fontWeight:800,color:'#0369a1',textTransform:'uppercase',letterSpacing:1.5,marginBottom:6}}>🏗️ Архітектура та технічні особливості</div>
+            <p style={{fontSize:13,color:'#0f172a',lineHeight:1.6,marginBottom:10}}>{item.details.architecture}</p>
+            {item.details.highlights.map((h, i) => (
+              <div key={i} style={{display:'flex',alignItems:'flex-start',gap:8,marginBottom:6,fontSize:13,color:'#334155',lineHeight:1.5}}>
+                <span style={{color:accent}}><IconCheck /></span>{h}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Benefit */}
+        <div style={{background:'#ecfdf5',border:'1px solid #a7f3d0',borderRadius:14,padding:'14px 18px',marginBottom:20}}>
+          <div style={{fontSize:11,fontWeight:800,color:'#047857',textTransform:'uppercase',letterSpacing:1.5,marginBottom:4}}>🚀 Цінність та перевага для бізнесу</div>
+          <div style={{fontSize:13.5,color:'#065f46',fontWeight:600,lineHeight:1.55}}>{item.benefit}</div>
+        </div>
+
+        {/* Stack */}
+        <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom:24}}>
+          {item.stack.map(s => <span key={s} className="case-stack-chip">{s}</span>)}
+        </div>
+
+        {/* Actions */}
+        <div style={{display:'flex',flexWrap:'wrap',gap:10,borderTop:'1px solid #f1f5f9',paddingTop:18}}>
+          {item.links.map((lnk, idx) => (
+            lnk.type === 'internal' ? (
+              <button key={idx} onClick={() => { onClose(); onNavContact(); }} className="case-link-btn case-link-primary">
+                {lnk.label} →
+              </button>
+            ) : (
+              <a key={idx} href={lnk.href} target="_blank" rel="noopener noreferrer"
+                className={`case-link-btn ${idx === 0 ? 'case-link-primary' : 'case-link-secondary'}`}>
+                {lnk.type === 'github' && <IconGithub sz={14} />}
+                {lnk.type === 'live' && <IconExternal sz={14} />}
+                {lnk.type === 'tg' && <IconTelegram sz={14} />}
+                {lnk.label}
+              </a>
+            )
+          ))}
+          <button onClick={() => { onClose(); onNavContact(); }} className="case-link-btn case-link-secondary" style={{marginLeft:'auto'}}>
+            Замовити подібне рішення
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 /* ─── Cases ── */
-const CaseCard = ({ c, idx, accent }) => (
-  <div className="reveal case-card-wrap" style={{transitionDelay:`${idx*0.09}s`}}>
-    <div style={{background:'#fff',border:'1px solid #f1f5f9',borderRadius:20,padding:32,height:'100%',display:'flex',flexDirection:'column',boxShadow:'0 2px 8px rgba(0,0,0,.04)'}}>
-      <span className={c.tagCls} style={{fontSize:11,fontWeight:700,padding:'4px 12px',borderRadius:100,display:'inline-block',marginBottom:16,fontFamily:'Montserrat'}}>
-        {c.tag}
-      </span>
-      <h3 style={{fontSize:19,fontWeight:800,color:'#0f172a',margin:'0 0 10px',letterSpacing:'-0.3px'}}>{c.title}</h3>
-      <p style={{fontSize:13,color:'#64748b',lineHeight:1.65,margin:'0 0 20px'}}>{c.desc}</p>
-      <div style={{marginTop:'auto'}}>
+const CaseCard = ({ c, idx, accent, onOpenDetail, onNavContact }) => (
+  <div className="reveal visible case-card-wrap" style={{transitionDelay:`${idx*0.07}s`}}>
+    <div className="case-card-inner" style={{background:'#fff',border:'1px solid #e2e8f0',borderRadius:20,padding:30,height:'100%',display:'flex',flexDirection:'column',boxShadow:'0 4px 14px rgba(15,23,42,.04)'}}>
+
+      {/* Top row: tag + quick links */}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,flexWrap:'wrap',marginBottom:16}}>
+        <span className={c.tagCls} style={{fontSize:11,fontWeight:700,padding:'4px 12px',borderRadius:100,display:'inline-block',fontFamily:'Montserrat'}}>
+          {c.tag}
+        </span>
+
+        <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+          {c.links.map((lnk, i) => (
+            lnk.type === 'internal' ? null : (
+              <a key={i} href={lnk.href} target="_blank" rel="noopener noreferrer"
+                style={{display:'inline-flex',alignItems:'center',gap:5,fontSize:11.5,fontWeight:700,color:lnk.type==='live'?accent:'#334155',background:lnk.type==='live'?'#f0f9ff':'#f8fafc',border:`1px solid ${lnk.type==='live'?'#bae6fd':'#e2e8f0'}`,padding:'4px 10px',borderRadius:8,textDecoration:'none',transition:'all .2s'}}
+              >
+                {lnk.type === 'github' && <IconGithub sz={13} />}
+                {lnk.type === 'live' && <IconExternal sz={13} />}
+                {lnk.type === 'tg' && <IconTelegram sz={13} />}
+                {lnk.label}
+              </a>
+            )
+          ))}
+        </div>
+      </div>
+
+      {/* Title & Pitch */}
+      <h3 style={{fontSize:19,fontWeight:800,color:'#0f172a',margin:'0 0 10px',letterSpacing:'-0.3px',lineHeight:1.3}}>{c.title}</h3>
+      <p style={{fontSize:13.5,color:'#475569',lineHeight:1.65,margin:'0 0 16px'}}>{c.desc}</p>
+
+      {/* How it works box */}
+      <div style={{background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:12,padding:'12px 14px',marginBottom:16}}>
+        <div style={{fontSize:10.5,fontWeight:800,color:accent,textTransform:'uppercase',letterSpacing:1.2,marginBottom:4}}>
+          ⚙️ Як це працює
+        </div>
+        <div style={{fontSize:12.5,color:'#334155',lineHeight:1.6}}>
+          {c.howItWorks}
+        </div>
+      </div>
+
+      {/* Features */}
+      <div style={{marginBottom:16}}>
+        <div style={{fontSize:10.5,fontWeight:800,color:'#64748b',textTransform:'uppercase',letterSpacing:1.2,marginBottom:8}}>
+          Ключовий функціонал
+        </div>
         {c.features.map((f,i) => (
-          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:9,marginBottom:10,color:'#475569',fontSize:13}}>
+          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:9,marginBottom:8,color:'#334155',fontSize:12.8,lineHeight:1.5}}>
             <span style={{color:accent,marginTop:1}}><IconCheck /></span>{f}
           </div>
         ))}
       </div>
+
+      {/* Business Benefit highlight */}
+      <div style={{background:'#f0fdf4',border:'1px solid #bbf7d0',borderRadius:12,padding:'11px 14px',marginBottom:16,marginTop:'auto'}}>
+        <div style={{fontSize:10.5,fontWeight:800,color:'#15803d',textTransform:'uppercase',letterSpacing:1.2,marginBottom:3}}>
+          🚀 Перевага для бізнесу
+        </div>
+        <div style={{fontSize:12.5,color:'#166534',fontWeight:600,lineHeight:1.5}}>
+          {c.benefit}
+        </div>
+      </div>
+
+      {/* Tech stack chips */}
+      <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom:18}}>
+        {c.stack.map(s => <span key={s} className="case-stack-chip">{s}</span>)}
+      </div>
+
+      {/* Footer actions */}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:8,paddingTop:14,borderTop:'1px solid #f1f5f9',flexWrap:'wrap'}}>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+          {c.links.map((lnk, i) => (
+            lnk.type === 'internal' ? (
+              <button key={i} onClick={onNavContact} className="case-link-btn case-link-primary">
+                {lnk.label} →
+              </button>
+            ) : (
+              <a key={i} href={lnk.href} target="_blank" rel="noopener noreferrer"
+                className={`case-link-btn ${i === 0 ? 'case-link-primary' : 'case-link-secondary'}`}>
+                {lnk.type === 'github' && <IconGithub sz={13} />}
+                {lnk.type === 'live' && <IconExternal sz={13} />}
+                {lnk.type === 'tg' && <IconTelegram sz={13} />}
+                {lnk.label}
+              </a>
+            )
+          ))}
+        </div>
+
+        <button onClick={() => onOpenDetail(c)} className="case-link-btn case-link-secondary">
+          Детальніше про архітектуру
+        </button>
+      </div>
+
     </div>
   </div>
 );
 
-const Cases = ({ sRef, accent }) => (
-  <section ref={sRef} id="cases" className="sec-pad" style={{background:'#f8fafc',padding:'96px 24px'}}>
-    <div style={{maxWidth:1180,margin:'0 auto'}}>
-      <div className="reveal" style={{textAlign:'center',marginBottom:64}}>
-        <SectionLabel text="Кейси" />
-        <SectionTitle text="Реальні проекти — реальні результати" />
-        <p style={{fontSize:15,color:'#64748b',marginTop:12}}>Кожен кейс — системне рішення під конкретну бізнес-задачу</p>
+const Cases = ({ accent, onNavContact }) => {
+  const [filter, setFilter] = useState('all');
+  const [selectedCase, setSelectedCase] = useState(null);
+
+  const filteredCases = filter === 'all'
+    ? CASES
+    : CASES.filter(c => c.categories.includes(filter));
+
+  return (
+    <section id="cases" className="sec-pad" style={{background:'#f8fafc',padding:'96px 24px'}}>
+      <div style={{maxWidth:1180,margin:'0 auto'}}>
+        <div className="reveal" style={{textAlign:'center',marginBottom:36}}>
+          <SectionLabel text="Портфоліо та Кейси" />
+          <SectionTitle text="Реальні проекти — вимірювані результати" />
+          <p style={{fontSize:15,color:'#64748b',marginTop:12,maxWidth:640,margin:'12px auto 0',lineHeight:1.6}}>
+            Від швидких веб-каталогів та EdTech PWA до масштабних E-commerce екосистем, B2B-синхронізації маркетплейсів та AI-аналітики складу
+          </p>
+        </div>
+
+        {/* Category Filter Tabs */}
+        <div className="reveal" style={{display:'flex',justifyContent:'center',gap:10,flexWrap:'wrap',marginBottom:44}}>
+          {CASE_CATEGORIES.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setFilter(cat.id)}
+              className={`filter-pill${filter === cat.id ? ' active' : ''}`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="cases-layout" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:26}}>
+          {filteredCases.map((c,i) => (
+            <CaseCard
+              key={c.id}
+              c={c}
+              idx={i}
+              accent={accent}
+              onOpenDetail={setSelectedCase}
+              onNavContact={onNavContact}
+            />
+          ))}
+        </div>
       </div>
-      <div className="cases-layout" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:24}}>
-        {CASES.map((c,i) => <CaseCard key={i} c={c} idx={i} accent={accent} />)}
-      </div>
-    </div>
-  </section>
-);
+
+      <CaseModal
+        item={selectedCase}
+        onClose={() => setSelectedCase(null)}
+        onNavContact={onNavContact}
+        accent={accent}
+      />
+    </section>
+  );
+};
 
 /* ─── Pricing ── */
 const PricingCard = ({ plan, onSelect, idx, accent }) => {
@@ -884,10 +1363,10 @@ const PricingCard = ({ plan, onSelect, idx, accent }) => {
       )}
       <div style={{fontSize:11,fontWeight:800,color:popular?'#38bdf8':accent,textTransform:'uppercase',letterSpacing:2.5,marginBottom:12}}>{name}</div>
       <div style={{fontSize:36,fontWeight:900,color:popular?'#fff':'#0f172a',letterSpacing:'-1.5px',marginBottom:4}}>{price}</div>
-      <div style={{fontSize:13,color:popular?'#475569':'#94a3b8',marginBottom:28}}>{sub}</div>
+      <div style={{fontSize:13,color:popular?'#94a3b8':'#64748b',marginBottom:28,lineHeight:1.45}}>{sub}</div>
       <div style={{borderTop:`1px solid ${popular?'rgba(255,255,255,.08)':'#f1f5f9'}`,paddingTop:24,flex:1}}>
         {features.map((f,i) => (
-          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:14,color:popular?'#cbd5e1':'#475569',fontSize:14}}>
+          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:14,color:popular?'#cbd5e1':'#475569',fontSize:13.5,lineHeight:1.5}}>
             <span style={{color:accent}}><IconCheck /></span>{f}
           </div>
         ))}
@@ -911,25 +1390,43 @@ const PricingCard = ({ plan, onSelect, idx, accent }) => {
   );
 };
 
-const Pricing = ({ sRef, onSelect, accent }) => (
-  <section ref={sRef} id="pricing" className="sec-pad" style={{background:'#fff',padding:'96px 24px'}}>
+const Pricing = ({ onSelect, accent }) => (
+  <section id="pricing" className="sec-pad" style={{background:'#fff',padding:'96px 24px'}}>
     <div style={{maxWidth:1180,margin:'0 auto'}}>
       <div className="reveal" style={{textAlign:'center',marginBottom:72}}>
-        <SectionLabel text="Пакети послуг" />
+        <SectionLabel text="Пакети послуг та цінова політика" />
         <SectionTitle text="Оберіть своє рішення" />
-        <p style={{fontSize:15,color:'#64748b',marginTop:12,maxWidth:500,margin:'12px auto 0'}}>
-          Інструменти та платформи підбираються індивідуально під вашу задачу
+        <p style={{fontSize:15,color:'#64748b',marginTop:12,maxWidth:560,margin:'12px auto 0',lineHeight:1.6}}>
+          Архітектура та стек підбираються індивідуально під вашу бізнес-задачу з фіксацією вартості в ТЗ
         </p>
       </div>
       <div className="pricing-layout" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24,alignItems:'start',paddingTop:20}}>
         {PLANS.map((p,i) => <PricingCard key={i} plan={p} onSelect={onSelect} idx={i} accent={accent} />)}
+      </div>
+
+      {/* Cooperation Policy / Guarantees */}
+      <div className="reveal" style={{marginTop:56,background:'#f8fafc',border:'1px solid #e2e8f0',borderRadius:20,padding:'28px 32px'}}>
+        <div style={{fontSize:11,fontWeight:800,color:accent,textTransform:'uppercase',letterSpacing:2,marginBottom:18,textAlign:'center'}}>
+          Політика співпраці та гарантії результату
+        </div>
+        <div className="policy-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:20}}>
+          {COOPERATION_POLICY.map((item, idx) => (
+            <div key={idx} style={{background:'#fff',border:'1px solid #e2e8f0',borderRadius:14,padding:'18px 16px'}}>
+              <div style={{display:'flex',alignItems:'center',gap:8,fontSize:13.5,fontWeight:800,color:'#0f172a',marginBottom:8}}>
+                <span style={{color:accent}}><IconCheck /></span>
+                {item.title}
+              </div>
+              <p style={{fontSize:12.5,color:'#64748b',lineHeight:1.6,margin:0}}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
 );
 
 /* ─── Contact ── */
-const Contact = ({ sRef, accent }) => {
+const Contact = ({ accent }) => {
   const [form, setForm] = useState({ name:'', contact:'', description:'' });
   const [status, setStatus] = useState('idle');
   const [submitting, setSubmitting] = useState(false);
@@ -944,23 +1441,20 @@ const Contact = ({ sRef, accent }) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 10000);
-      const res = await fetch(WEBHOOK, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(form),
-        keepalive: true,
-        signal: ctrl.signal,
+      await fetch(WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(form).toString(),
       });
-      clearTimeout(timer);
-      if (res.ok) {
-        setSavedName(form.name);
-        setForm({ name:'', contact:'', description:'' });
-        setStatus('success');
-      } else { setStatus('error'); }
-    } catch { setStatus('error'); }
-    finally { setSubmitting(false); }
+      setSavedName(form.name);
+      setForm({ name: '', contact: '', description: '' });
+      setStatus('success');
+    } catch {
+      setStatus('error');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const inp = {
@@ -975,15 +1469,16 @@ const Contact = ({ sRef, accent }) => {
     { icon:<IconTelegram sz={20}/>, label:'Telegram', val:'@romanmuronchuk', href:'https://t.me/romanmuronchuk' },
     { icon:<IconInsta sz={20}/>,    label:'Instagram', val:'roma.ai.pro',    href:'https://www.instagram.com/roma.ai.pro?igsh=eWdneW9zZjlxeTh1' },
     { icon:<IconEmail sz={20}/>,    label:'Email',     val:'mironcukroman602@gmail.com', href:'mailto:mironcukroman602@gmail.com' },
+    { icon:<IconGithub sz={20}/>,   label:'GitHub',    val:'github.com/Romanaipro', href:'https://github.com/Romanaipro' },
   ];
 
   return (
-    <section ref={sRef} id="contact" className="sec-pad" style={{background:'#07101f',padding:'96px 24px'}}>
+    <section id="contact" className="sec-pad" style={{background:'#07101f',padding:'96px 24px'}}>
       <div style={{maxWidth:1180,margin:'0 auto'}}>
         <div className="reveal" style={{textAlign:'center',marginBottom:64}}>
           <SectionLabel text="Контакти" light />
           <SectionTitle text="Розпочніть проект сьогодні" light />
-          <p style={{fontSize:15,color:'#475569',marginTop:12}}>Розкажіть про задачу — я запропоную оптимальне рішення</p>
+          <p style={{fontSize:15,color:'#64748b',marginTop:12}}>Розкажіть про вашу задачу — запропоную архітектуру, оцінку та план реалізації</p>
         </div>
 
         <div className="contact-layout" style={{display:'grid',gridTemplateColumns:'1fr 1.5fr',gap:56,alignItems:'start'}}>
@@ -992,21 +1487,21 @@ const Contact = ({ sRef, accent }) => {
           <div className="reveal" style={{display:'flex',flexDirection:'column',gap:14}}>
             {CONTACTS.map(c => (
               <a key={c.label} href={c.href} target="_blank" rel="noopener noreferrer" className="contact-link"
-                style={{display:'flex',alignItems:'center',gap:14,textDecoration:'none',padding:'18px 20px',borderRadius:16,background:'rgba(255,255,255,.04)',border:'1px solid rgba(255,255,255,.07)'}}>
+                style={{display:'flex',alignItems:'center',gap:14,textDecoration:'none',padding:'16px 20px',borderRadius:16,background:'rgba(255,255,255,.04)',border:'1px solid rgba(255,255,255,.07)'}}>
                 <div style={{width:44,height:44,borderRadius:12,background:'rgba(8,126,164,.2)',display:'flex',alignItems:'center',justifyContent:'center',color:'#38bdf8',flexShrink:0}}>
                   {c.icon}
                 </div>
                 <div>
-                  <div style={{fontSize:11,color:'#475569',fontWeight:700,textTransform:'uppercase',letterSpacing:1}}>{c.label}</div>
+                  <div style={{fontSize:11,color:'#64748b',fontWeight:700,textTransform:'uppercase',letterSpacing:1}}>{c.label}</div>
                   <div style={{fontSize:14,color:'#fff',fontWeight:600,marginTop:2}}>{c.val}</div>
                 </div>
               </a>
             ))}
 
-            <div style={{marginTop:8,padding:20,borderRadius:16,background:'rgba(8,126,164,.08)',border:'1px solid rgba(8,126,164,.2)'}}>
+            <div style={{marginTop:4,padding:20,borderRadius:16,background:'rgba(8,126,164,.08)',border:'1px solid rgba(8,126,164,.2)'}}>
               <div style={{color:'#38bdf8',fontSize:12,fontWeight:700,marginBottom:8,textTransform:'uppercase',letterSpacing:1}}>⏱ Час відповіді</div>
-              <div style={{color:'#64748b',fontSize:14,lineHeight:1.65}}>
-                Зазвичай відповідаю протягом кількох годин. Для термінових задач — Telegram.
+              <div style={{color:'#94a3b8',fontSize:13.5,lineHeight:1.65}}>
+                Зазвичай відповідаю протягом 1–2 годин. Для швидкого обговорення або демонстрації кейсів — пишіть у Telegram.
               </div>
             </div>
           </div>
@@ -1044,7 +1539,7 @@ const Contact = ({ sRef, accent }) => {
                   </div>
                   <div style={{marginBottom:24}}>
                     <label style={lbl}>Опис задачі</label>
-                    <textarea className="form-input" style={{...inp,resize:'vertical',minHeight:110}} value={form.description} onChange={e=>setForm(p=>({...p,description:e.target.value}))} required disabled={submitting} rows={4} placeholder="Розкажіть про вашу задачу..." />
+                    <textarea className="form-input" style={{...inp,resize:'vertical',minHeight:110}} value={form.description} onChange={e=>setForm(p=>({...p,description:e.target.value}))} required disabled={submitting} rows={4} placeholder="Опишіть ваш бізнес, задачу або який із кейсів зацікавив..." />
                   </div>
                   <button type="submit" disabled={submitting}
                     style={{
@@ -1080,13 +1575,6 @@ const App = () => {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const accent = t.accentColor;
 
-  const refs = {
-    about:   useRef(null),
-    cases:   useRef(null),
-    pricing: useRef(null),
-    contact: useRef(null),
-  };
-
   const [active, setActive] = useState('');
 
   useScrollReveal();
@@ -1095,7 +1583,7 @@ const App = () => {
     const fn = () => {
       const order = ['contact','pricing','cases','about'];
       for (const key of order) {
-        const el = refs[key]?.current;
+        const el = document.getElementById(key);
         if (!el) continue;
         if (el.getBoundingClientRect().top <= 90) { setActive(key); return; }
       }
@@ -1106,7 +1594,7 @@ const App = () => {
   }, []);
 
   const onNav = (key) => {
-    scrollTo(refs[key]?.current);
+    scrollToSection(key);
     setActive(key);
   };
 
@@ -1114,14 +1602,14 @@ const App = () => {
     <div>
       <Header onNav={onNav} active={active} accent={accent} />
       <main>
-        <Hero onCTA={() => onNav('contact')} accent={accent} />
-        <About sRef={refs.about} accent={accent} />
-        <Cases sRef={refs.cases} accent={accent} />
-        <Pricing sRef={refs.pricing} onSelect={() => onNav('contact')} accent={accent} />
-        <Contact sRef={refs.contact} accent={accent} />
+        <Hero onCTA={() => onNav('contact')} onCases={() => onNav('cases')} accent={accent} />
+        <About accent={accent} />
+        <Cases accent={accent} onNavContact={() => onNav('contact')} />
+        <Pricing onSelect={() => onNav('contact')} accent={accent} />
+        <Contact accent={accent} />
       </main>
       <footer style={{background:'#040a14',textAlign:'center',padding:'28px 24px',borderTop:'1px solid rgba(255,255,255,.04)'}}>
-        <p style={{color:'#1e293b',fontSize:13}}>© {new Date().getFullYear()} Roman Myronchuk. Усі права захищено.</p>
+        <p style={{color:'#475569',fontSize:13}}>© {new Date().getFullYear()} Roman Myronchuk — AI Systems & Full-Stack Architect. Усі права захищено.</p>
       </footer>
 
       <TweaksPanel>
