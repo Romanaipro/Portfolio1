@@ -1,0 +1,2652 @@
+const {
+  useState,
+  useEffect
+} = React;
+const ACCENT = '#087ea4';
+const WEBHOOK = 'https://n8n.myproject.pp.ua/webhook/b591e01e-c6ff-4fcf-843d-28cb282f8fba';
+
+/* ─── Hero & About Stats ── */
+const HERO_STATS = [['6+', 'Працюючих бізнес-систем'], ['до 5×', 'Менше ручної рутини з прайсами'], ['10–15 днів', 'Середній запуск проекту']];
+const ABOUT_GUARANTEES = [['100%', 'Передача коду та прав'], ['30 днів', 'Безкоштовної підтримки'], ['0 помилок', 'AI у цінах та залишках']];
+
+/* ─── Categories & Cases ── */
+const CASE_CATEGORIES = [{
+  id: 'all',
+  label: 'Усі проекти (6)'
+}, {
+  id: 'ecom',
+  label: 'Магазини & Каталоги'
+}, {
+  id: 'ai',
+  label: 'AI & Автоматизація'
+}, {
+  id: 'analytics',
+  label: 'Склад, CRM & Тренажери'
+}];
+const CASES = [{
+  id: 'urban-trend-shop',
+  categories: ['ecom', 'ai'],
+  visualType: 'ecom-tma',
+  visualBadge: 'Живий магазин + Telegram Mini App + 3 боти',
+  visualMetrics: ['−80% часу на картки', 'Авто-ТТН + WayForPay', 'Єдиний склад SKU'],
+  title: 'Urban Trend Shop — Магазин одягу на сайті та в Telegram з єдиним складом',
+  problem: 'Замовлення з сайту, Інстаграму та месенджерів велися окремо: менеджери вручну перевіряли наявність розмірів, створювали ТТН Нової Пошти та витрачали години на заповнення карток нових товарів.',
+  features: ['Публічний SEO-сайт + зручний магазин прямо всередині Telegram (Mini App) із кошиком та вибором розміру/кольору', 'Автоматичний прийом оплат (WayForPay) і миттєве формування ТТН Нової Пошти без ручного копіювання даних', '3 спеціалізовані боти в єдиній зв’язці: вітрина з реферальною програмою, підтримка клієнтів та швидке списання зі складу', 'Адмін-панель із аналітикою продажів, авто-поверненням клієнтів купонами та AI-генерацією описів товарів за секунди'],
+  benefit: 'Оформлення нових товарів прискорилося у 5 разів, залишки синхронізуються миттєво після кожної покупки, а бізнес працює без абонплат стороннім конструкторам.',
+  howItWorks: 'Клієнт відкриває магазин у браузері або Telegram → обирає розмір/колір, відділення Нової Пошти та оплачує через WayForPay → система автоматично перевіряє оплату, списує товар зі складу, створює ТТН і сповіщає менеджерів у Telegram.',
+  stack: ['React 18', 'Python (Flask)', 'PostgreSQL 16', 'Telegram Mini App', 'WayForPay', 'Нова Пошта API', 'OpenAI GPT-4o-mini', 'Docker'],
+  links: [{
+    label: 'Відкрити Telegram Mini App',
+    href: 'https://t.me/URBAN_TREND_SHOP_BOT',
+    type: 'tg'
+  }, {
+    label: 'Відкрити живий сайт',
+    href: 'https://urbantrend.com.ua',
+    type: 'live'
+  }],
+  tag: 'E-commerce & Telegram Mini App',
+  tagCls: 'tag-telegram',
+  details: {
+    architecture: 'Шестисервісний Docker Compose стек на VPS за реверс-проксі Caddy: PostgreSQL 16 (автоміграції з advisory lock), Flask API, React SPA, виділений планувальник щоденних лояльність-кампаній та об’єднаний процес трьох aiogram 3 ботів.',
+    highlights: ['Захист від подвійних списань та дублів вебхуків оплати WayForPay (ідемпотентна машина станів)', 'Структурована AI-генерація описів за чітким шаблоном (матеріали, крій, догляд, переваги)', 'Автоматичне стиснення завантажених фото у швидкий формат WebP', 'Трирівнева система лояльності (Newcomer / Regular / VIP) та автоматичні купони для клієнтів, які давно не купували']
+  }
+}, {
+  id: 'my-prom',
+  categories: ['ecom', 'ai'],
+  visualType: 'prom-b2b',
+  visualBadge: 'Авто-імпорт прайсів → AI-описи → Prom.ua',
+  visualMetrics: ['0 помилок у цінах', '1000+ SKU без рутини', 'Авто-експорт YML/XLSX'],
+  title: 'Мій Prom — Автоматичне завантаження прайсів постачальників та AI-описи для Prom.ua',
+  problem: 'Контент-менеджери вручну переносили сотні товарів із різних Excel-таблиць постачальників, переписували описи для Prom.ua і припускалися помилок у цінах та наявності.',
+  features: ['Завантаження будь-яких таблиць постачальників (CSV/XLSX) із автоматичним запам’ятовуванням структури колонок', 'Автоматична обробка фотографій товарів (перевірка, стиснення у WebP/JPG та прибирання дублів)', 'Генерація продаючих українських SEO-заголовків, описів та ключових слів через AI без жодних вигадок', 'Автоматичний розрахунок роздрібної націнки та пряме оновлення товарів і залишків на Prom.ua за API'],
+  benefit: 'Повністю прибирає ручну роботу контент-менеджера з таблицями постачальників і на 100% захищає магазин від помилок штучного інтелекту в цінах, артикулах чи залишках.',
+  howItWorks: 'Власник завантажує прайс постачальника → система очищує дані й фото → AI пише грамотні українські описи та пошукові запити, не торкаючись цін і цифр → після схвалення власником товари автоматично летять на Prom.ua.',
+  stack: ['Python 3.12', 'React', 'PostgreSQL', 'Prom.ua API', 'OpenAI Structured Outputs', 'XLSX / YML Генератор', 'Docker'],
+  links: [{
+    label: 'Запитати демо системи',
+    href: 'https://t.me/romanmuronchuk?text=' + encodeURIComponent('Привіт! Цікавить демонстрація B2B-платформи «Мій Prom» для роботи з прайсами та Prom.ua.'),
+    type: 'tg'
+  }, {
+    label: 'Приклад вітрини',
+    href: 'https://t.me/URBAN_TREND_SHOP_BOT',
+    type: 'live'
+  }],
+  tag: 'Автоматизація Prom.ua & AI',
+  tagCls: 'tag-ecom',
+  details: {
+    architecture: 'Ізольована чотирисервісна архітектура (PostgreSQL, Backend, фоновий воркер черги задач, React-кабінет власника). Усі зміни проходять двоконтурну перевірку перед публікацією в Prom API.',
+    highlights: ['AI фізично не має технічного права змінити ціну, артикул, категорію чи наявність товару', 'Автоматичний перерахунок роздрібної ціни за правилами націнки та приховування товарів, яких немає в наявності', 'Миттєві сповіщення власнику в Telegram про результати синхронізації прайсів']
+  }
+}, {
+  id: 'inventory-analytics-ai',
+  categories: ['ai', 'analytics'],
+  visualType: 'salesdrive-ai',
+  visualBadge: 'SalesDrive CRM + Розрахунок закупівель у Telegram',
+  visualMetrics: ['5 хв замість 5 годин', '1 500 активних SKU', 'Контроль хітів 🔥 і неліквіду ❄️'],
+  title: 'Автопілот складу та закупівель на 1 500 товарів (SalesDrive + AI у Telegram)',
+  problem: 'Власник витрачав по 4–6 годин щотижня на зведення залишків із SalesDrive в Excel. Через дні, коли товар закінчувався на складі, середня швидкість продажів рахувалася неправильно: хіти продажів вчасно не докуповувалися, а гроші заморожувалися в неліквіді.',
+  features: ['Щоденна автоматична синхронізація каталогу, залишків і статусів замовлень напряму з SalesDrive CRM', 'Точний розрахунок реальної швидкості продажів за 7 і 30 днів (дні порожнього складу автоматично відсікаються)', 'Поділ товарів на групи прибутковості (ABC): система підсвічує дефіцитні хіти (🔥) та заморожені гроші в неліквіді (❄️)', 'Готовий Excel-бланк замовлення постачальнику у Telegram за 1 клік + голосовий AI-помічник для власника'],
+  benefit: 'Час на планування закупівлі скоротився з 5 годин до 5 хвилин. Жодних подвійних замовлень товару, який вже їде в дорозі, і повний захист від дефіциту ходових позицій.',
+  howItWorks: 'Система щоночі забирає дані з SalesDrive → рахує чистий попит і віднімає партії, які вже в дорозі → надсилає власнику в Telegram готовий Excel-файл на закупівлю та відповідає на голосові запитання про склад.',
+  stack: ['Python', 'SalesDrive API', 'PostgreSQL', 'Telegram Bot API', 'OpenAI + Whisper (Голос)', 'Excel (OpenPyXL)', 'Docker'],
+  links: [{
+    label: 'Запитати демо в Telegram',
+    href: 'https://t.me/romanmuronchuk?text=' + encodeURIComponent('Привіт! Цікавить демонстрація AI-системи аналітики складу та закупівель (SalesDrive).'),
+    type: 'tg'
+  }],
+  tag: 'Аналітика складу & SalesDrive',
+  tagCls: 'tag-data',
+  details: {
+    architecture: 'Модульний Python-сервіс із базою даних щоденних зрізів залишків, трекінгом статусів поставок (Чернетка → В дорозі → Частково прийнято → На складі), інтеграцією з SalesDrive CRM та Telegram-ботом.',
+    highlights: ['Точний облік статусів Продаж / Резерв / Відмова / Повернення без подвійного списання', 'Власник може поправити цифри прямо в Excel-файлі і скинути його назад у бот — система сама оновить замовлення', 'Голосове керування: можна спитати бота голосом у Telegram «Що терміново докупити по групі А?» і отримати точний розрахунок']
+  }
+}, {
+  id: 'gentlemen-craft-catalog',
+  categories: ['ecom'],
+  visualType: 'craft-catalog',
+  visualBadge: '210+ товарів • Миттєве відкриття • Лід у Telegram/Viber',
+  visualMetrics: ['210+ виробів у каталозі', '< 1 сек завантаження', 'Замовлення в 1 клік'],
+  title: 'GENTLMEN CRAFT — Швидкий мобільний веб-каталог нард та шахів ручної роботи',
+  problem: 'Клієнти з реклами в Instagram і TikTok губилися в соцмережах, довго чекали на фото моделей у переписці й часто йшли без покупки, не дочекавшись відповіді.',
+  features: ['Зручний каталог на 210+ виробів у 4 категоріях (скляні й дерев’яні нарди, шахи, фішки) зі швидкими фільтрами', 'Миттєве відкриття сотень детальних фотографій навіть при слабкому мобільному інтернеті', 'Кожна модель має власне пряме посилання, яке зручно скинути клієнту або запустити в рекламу', 'Кнопки «Замовити в Telegram / Viber» на кожній картці, які одразу передають майстру назву та артикул обраної моделі'],
+  benefit: 'Рекламний трафік із соцмереж більше не втрачається: клієнт за 30 секунд сам обирає модель у каталозі і пише в месенджер уже готовим до замовлення.',
+  howItWorks: 'Покупець переходить із реклами у швидкий каталог на телефоні → фільтрує потрібний тип виробів → роздивляється фото високої чіткості та в 1 клік переходить у чат з майстром із вже прикріпленим товаром.',
+  stack: ['React 18', 'Vite', 'Оптимізація фото WebP/AVIF', 'SEO-маршрутизація', 'Netlify CDN'],
+  links: [{
+    label: 'Відкрити живий каталог',
+    href: 'https://nardy-katalog.netlify.app/',
+    type: 'live'
+  }],
+  tag: 'Веб-каталог для продажів',
+  tagCls: 'tag-ecom',
+  details: {
+    architecture: 'Надшвидкий клієнтський веб-додаток (React + Vite) із автоматичним конвеєром стиснення зображень у формати WebP та AVIF і роздачею через глобальну мережу CDN.',
+    highlights: ['Автоматична перевірка всіх 210+ карток та фото перед кожним оновленням сайту', 'Окремий блок для замовлення індивідуального дизайну з власним фото, ініціалами або гербом', 'Ідеальна адаптація під екрани смартфонів для трафіку з Instagram, TikTok та Google Ads']
+  }
+}, {
+  id: 'ai-sales-bot-24-7',
+  categories: ['ai', 'analytics'],
+  visualType: 'crm-bot',
+  visualBadge: 'AI-консультант 24/7 → Готова угода в KeyCRM',
+  visualMetrics: ['Відповідь за 3 сек 24/7', '8 пунктів брифу', 'Авто-запис у KeyCRM'],
+  title: 'AI-Менеджер продажів 24/7 із автоматичним створенням замовлень у KeyCRM',
+  problem: ' до 40% клієнтів пишуть увечері, у вихідні або коли менеджери зайняті. Поки менеджер відповість наступного ранку — клієнт вже купив у конкурентів.',
+  features: ['Миттєва ввічлива відповідь клієнту 24/7 без вихідних і точна консультація виключно за вашим прайсом', 'Ненав’язливий збір усіх деталей замовлення у діалозі (8 ключових питань брифу замість нудних анкет)', 'Автоматичне створення картки клієнта та угоди прямо у вашій KeyCRM разом із повною історією переписки', 'Оцінка готовності клієнта до покупки та миттєве сповіщення живого менеджера, коли клієнт готовий платити'],
+  benefit: 'Жодне нічне чи вихідне звернення не губиться. Менеджери отримують у KeyCRM вже «теплих» клієнтів із заповненими даними, витрачаючи втричі менше часу на переписку.',
+  howItWorks: 'Клієнт пише в бот у будь-який час → AI-асистент відповідає на питання по каталогу та дізнається параметри замовлення → записує все в базу даних, створює угоду в KeyCRM і кличе менеджера на фінальне закриття оплати.',
+  stack: ['OpenAI API', 'Python / n8n', 'KeyCRM API', 'PostgreSQL', 'Telegram Bot API'],
+  links: [{
+    label: 'Замовити подібного AI-бота',
+    href: '#contact',
+    type: 'internal',
+    planHint: 'AI-Бот продажів 24/7 + інтеграція з CRM'
+  }],
+  tag: 'AI-Відділ продажів & KeyCRM',
+  tagCls: 'tag-ai',
+  details: {
+    architecture: 'Інтеграційний контур на базі AI-агента з довготривалою пам’яттю діалогу в PostgreSQL, чітким контролем фактів по каталогу та двостороннім обміном із KeyCRM.',
+    highlights: ['Захист від вигадування неіснуючих знижок чи умов (відповіді лише за затвердженою базою знань)', 'Миттєве перемикання діалогу на живого менеджера при нестандартних запитах клієнта', 'Прозора статистика: скільки діалогів перетворилося на реальні заявки в CRM']
+  }
+}, {
+  id: 'edki-nuclear-prep',
+  categories: ['analytics'],
+  visualType: 'edtech-pwa',
+  visualBadge: 'Оцифрована база знань • PWA-додаток + Бот',
+  visualMetrics: ['100 питань у симуляторі', '6 профільних модулів', 'Працює з телефона'],
+  title: 'ЄДКІ «Атомна енергетика» — Навчальна платформа та симулятор іспиту (Web + Telegram)',
+  problem: 'Сотні сторінок складних правил, регламентів і тестових білетів були розкидані по PDF-файлах і паперових конспектах — готуватися з телефона було незручно, а відстежити свої слабкі теми неможливо.',
+  features: ['Повна оцифровка складної бази документів і нормативів у зручний інтерактивний додаток у телефоні та браузері', 'Режим реального іспиту: 100 питань із таймером на 120 хвилин та детальним звітом по кожній темі', 'Розумний тренажер із поясненням кожної відповіді, картками для запам’ятовування та автоматичним списком помилок', 'Вбудований швидкий довідник з пошуком та збереженням особистого прогресу користувача'],
+  benefit: 'Показує, як будь-яку складну базу знань компанії, регламенти чи навчання персоналу можна перетворити на зручний мобільний тренажер у Telegram із контролем результатів.',
+  howItWorks: 'Автоматичний Python-скрипт перетворив документи й білети на чисту базу даних → користувач відкриває тренажер у Telegram або браузері, проходить тести, бачить пояснення і тренує свої слабкі місця.',
+  stack: ['React 18', 'TypeScript', 'Tailwind CSS', 'Telegram WebApp', 'Python Data Pipeline', 'PWA'],
+  links: [{
+    label: 'Відкрити бот-тренажер',
+    href: 'https://t.me/yedki_hub_test_bot',
+    type: 'tg'
+  }],
+  tag: 'Навчальна платформа & Бот',
+  tagCls: 'tag-edtech',
+  details: {
+    architecture: 'Автономний веб-додаток (PWA) на React 18 + TypeScript у зв’язці з Telegram-ботом (@yedki_hub_test_bot), аналітичним дашбордом успішності та можливістю роботи навіть при нестабільному інтернеті.',
+    highlights: ['Ідеальне рішення для компаній, яким потрібно автоматизувати навчання та тестування нових менеджерів чи інженерів', 'Наочна діаграма знань по 6 модулях після кожного тестування']
+  }
+}];
+
+/* ─── Certificates Data ── */
+const CERTIFICATES = [{
+  id: 'google-ai-business',
+  title: 'ШІ для бізнесу 2.0',
+  issuer: 'Google • Міністерство економіки України • EdEra',
+  score: 'Результат тестування: 100%',
+  date: '2026',
+  code: 'ID: 598b29b0-6173-438d-bb34-d3c88bd6e6e8',
+  desc: 'Практичне впровадження штучного інтелекту в операційні процеси бізнесу, автоматизацію аналітики, маркетингу та клієнтського сервісу.',
+  img: 'assets/certificates/cert-google-ai-business.webp',
+  badgeColor: '#087ea4'
+}, {
+  id: 'make-ai-systems',
+  title: 'Розробка AI систем для автоматизації бізнесу',
+  issuer: 'Make AI (makeai.in.ua)',
+  score: 'Підтверджено командою розробки',
+  date: 'Березень 2026',
+  code: 'Стек: OpenAI • Claude • Gemini • n8n • Railway',
+  desc: 'Проектування та побудова комплексних AI-систем і бізнес-воркфлоу з використанням LLM-агентів (OpenAI, Anthropic Claude, Gemini), n8n та хмарної інфраструктури.',
+  img: 'assets/certificates/cert-makeai-systems.webp',
+  badgeColor: '#0f172a'
+}, {
+  id: 'alpi-ai-creator',
+  title: 'AI Creator — Advanced AI Tools & Generation',
+  issuer: 'ALPI Academy',
+  score: 'Обсяг курсу: 2.4 ECTS',
+  date: 'Березень 2025',
+  code: 'Certificate ID: 56671-0009',
+  desc: 'Професійна робота з генеративними моделями для створення та автоматизації текстового, графічного, відео- та аудіоконтенту.',
+  img: 'assets/certificates/cert-alpi-ai-creator.webp',
+  badgeColor: '#be185d'
+}];
+
+/* ─── Client Reviews / Social Proof ── */
+const REVIEWS = [{
+  role: 'Власник магазину одягу (E-commerce + Telegram Mini App)',
+  project: 'Urban Trend Shop',
+  text: '«Раніше ми плуталися в залишках між сайтом і переписками, а опис кожної нової партії товару займав цілий день. Роман зібрав нам єдину систему: сайт, магазин прямо в Telegram і 3 боти для складу та менеджерів. Тепер ТТН Нової Пошти й оплати створюються автоматично, а картка товару заповнюється через AI за хвилину».',
+  metric: 'У 5 разів швидша робота з каталогом та 0 плутанини зі складом'
+}, {
+  role: 'Керівник товарного бізнесу (1 500+ артикулів у SalesDrive)',
+  project: 'AI-Асистент складу та закупівель',
+  text: '«Щотижня я сидів по пів дня з вигрузками із SalesDrive, щоб порахувати, що докупити у постачальників, і постійно або не помічав, що хіти закінчуються, або замовляв зайве. Зараз бот за секунди присилає готовий Excel-бланк із поділом на хіти й неліквід і враховує товар, який вже їде в дорозі».',
+  metric: 'Планування закупівлі скоротилося з 5 годин до 5 хвилин'
+}, {
+  role: 'Засновник майстерні виробів ручної роботи',
+  project: 'Веб-каталог GENTLMEN CRAFT',
+  text: '«Клієнти з реклами просили скинути всі варіанти нард у приватні повідомлення, а фотографії вантажилися довго. Після запуску нового каталогу на 210+ моделей люди самі обирають виріб за хвилину, і до нас у Telegram чи Viber приходить уже готове замовлення з конкретною моделлю».',
+  metric: 'Миттєве відкриття 210+ товарів зі смартфона та ріст заявок з реклами'
+}];
+
+/* ─── Pricing Plans ── */
+const PLANS = [{
+  name: 'Швидкий Старт (Start System)',
+  price: '$300–599',
+  timeline: 'Термін запуску: 5–7 робочих днів',
+  sub: 'Ідеально для швидкого запуску продажів або заміни ручної переписки',
+  features: ['Сучасний швидкий веб-каталог (як GENTLMEN CRAFT) або Telegram-бот для прийому замовлень', 'Миттєве завантаження фото з телефона (WebP/AVIF) та прямі посилання під рекламу', 'Автоматизація 1–2 головних процесів (заявки в Telegram, Viber, Google Таблиці або CRM)', 'Повне налаштування на сервері під ключ + інструкція для вас']
+}, {
+  name: 'Автопілот Бізнесу (Business Core)',
+  price: '$900–1500',
+  timeline: 'Термін запуску: 10–15 робочих днів',
+  sub: 'Комплексна автоматизація продажів, складу та CRM без ручної рутини',
+  features: ['AI-система аналітики складу й закупівель або AI-менеджер прийому клієнтів 24/7', 'Глибока двостороння синхронізація з вашою CRM (SalesDrive, KeyCRM) та базою даних', 'Голосовий і текстовий AI-помічник власника у Telegram (GPT-4o + розпізнавання голосу)', 'Автогенерація готових Excel-бланків закупівель та контроль товару в дорозі', 'Підключення онлайн-оплат (WayForPay) і авто-створення ТТН (Нова Пошта API)'],
+  popular: true
+}, {
+  name: 'Екосистема під ключ (Enterprise)',
+  price: 'від $2000',
+  timeline: 'Термін запуску: 15–25 робочих днів',
+  sub: 'Повна цифрова платформа для масштабної торгівлі та маркетплейсів',
+  features: ['Магазин під ключ: публічний SEO-сайт + Telegram Mini App + система ботів для команди', 'B2B-платформа авто-імпорту прайсів постачальників та синхронізації з Prom.ua', 'Безпечне AI-наповнення тисяч карток товарів без помилок у цінах і характеристиках', 'Власна зручна адмін-панель із фінансовою аналітикою, воронкою продажів та бонусною системою', 'Надійна серверна інфраструктура (Docker, автоматичні бекапи, захист даних)']
+}];
+const COOPERATION_POLICY = [{
+  title: 'Фіксована ціна до старту',
+  desc: 'Разом прописуємо просте й зрозуміле завдання до початку робіт. Вартість не зросте в процесі розробки.'
+}, {
+  title: 'Безпечна поетапна оплата',
+  desc: 'Розбиваємо роботу на 3–4 зрозумілі етапи. Ви оплачуєте наступний крок лише після того, як побачили й перевірили попередній.'
+}, {
+  title: '30 днів безкоштовної гарантії',
+  desc: 'Після запуску я залишаюся на зв’язку, допомагаю вашій команді розібратися і безкоштовно правлю будь-які технічні нюанси.'
+}, {
+  title: 'Усе належить тільки вам (100%)',
+  desc: 'Жодної «голки» чи прихованої абонплати: передаю вам весь код, базу даних та всі паролі й доступи.'
+}];
+const TECH_CATEGORIES = [{
+  label: 'Штучний інтелект (AI & LLM)',
+  items: ['OpenAI GPT-4o', 'Whisper-1 (Голос)', 'Structured Outputs', 'Anthropic Claude', 'Google Gemini', 'RAG-системи']
+}, {
+  label: 'Серверна частина & Боти',
+  items: ['Python 3.12', 'Flask', 'aiogram 3', 'REST API', 'Webhooks', 'Фонові воркери']
+}, {
+  label: 'Сайти & Telegram Mini Apps',
+  items: ['React 18', 'TypeScript', 'Tailwind CSS', 'Vite', 'Telegram Mini Apps', 'PWA-додатки']
+}, {
+  label: 'Бази даних & Таблиці',
+  items: ['PostgreSQL 16', 'SQLite', 'Supabase', 'Redis', 'Excel (OpenPyXL)', 'YML / XML фіди']
+}, {
+  label: 'Інтеграції для бізнесу (Україна)',
+  items: ['SalesDrive API', 'Prom.ua API', 'KeyCRM', 'WayForPay', 'Нова Пошта API', 'Google Sheets API']
+}, {
+  label: 'Сервери & Автоматизація',
+  items: ['Docker Compose', 'Caddy / Nginx', 'n8n', 'Make', 'Vercel / Netlify', 'VPS Хостинг']
+}];
+
+/* ─── Icons ── */
+const IconCheck = () => /*#__PURE__*/React.createElement("svg", {
+  width: "15",
+  height: "15",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2.5",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  style: {
+    flexShrink: 0,
+    marginTop: 2
+  }
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M5 13l4 4L19 7"
+}));
+const IconExternal = ({
+  sz = 14
+}) => /*#__PURE__*/React.createElement("svg", {
+  width: sz,
+  height: sz,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2.2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+}), /*#__PURE__*/React.createElement("polyline", {
+  points: "15 3 21 3 21 9"
+}), /*#__PURE__*/React.createElement("line", {
+  x1: "10",
+  y1: "14",
+  x2: "21",
+  y2: "3"
+}));
+const IconGithub = ({
+  sz = 14
+}) => /*#__PURE__*/React.createElement("svg", {
+  width: sz,
+  height: sz,
+  viewBox: "0 0 24 24",
+  fill: "currentColor"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"
+}));
+const IconTelegram = ({
+  sz = 22
+}) => /*#__PURE__*/React.createElement("svg", {
+  width: sz,
+  height: sz,
+  viewBox: "0 0 24 24",
+  fill: "currentColor"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.883 13.99l-2.938-.916c-.638-.203-.651-.638.135-.944l11.467-4.42c.533-.194 1.001.131.347.511z"
+}));
+const IconInsta = ({
+  sz = 22
+}) => /*#__PURE__*/React.createElement("svg", {
+  width: sz,
+  height: sz,
+  viewBox: "0 0 24 24",
+  fill: "currentColor"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162S8.597 18.163 12 18.163s6.162-2.759 6.162-6.162S15.403 5.838 12 5.838zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+}));
+const IconEmail = ({
+  sz = 22
+}) => /*#__PURE__*/React.createElement("svg", {
+  width: sz,
+  height: sz,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "1.7",
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+}));
+const IconMenu = () => /*#__PURE__*/React.createElement("svg", {
+  width: "24",
+  height: "24",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2",
+  strokeLinecap: "round"
+}, /*#__PURE__*/React.createElement("line", {
+  x1: "4",
+  y1: "6",
+  x2: "20",
+  y2: "6"
+}), /*#__PURE__*/React.createElement("line", {
+  x1: "4",
+  y1: "12",
+  x2: "20",
+  y2: "12"
+}), /*#__PURE__*/React.createElement("line", {
+  x1: "4",
+  y1: "18",
+  x2: "20",
+  y2: "18"
+}));
+const IconX = () => /*#__PURE__*/React.createElement("svg", {
+  width: "22",
+  height: "22",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2.2",
+  strokeLinecap: "round"
+}, /*#__PURE__*/React.createElement("line", {
+  x1: "6",
+  y1: "6",
+  x2: "18",
+  y2: "18"
+}), /*#__PURE__*/React.createElement("line", {
+  x1: "18",
+  y1: "6",
+  x2: "6",
+  y2: "18"
+}));
+const IconAward = ({
+  sz = 18
+}) => /*#__PURE__*/React.createElement("svg", {
+  width: sz,
+  height: sz,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2.2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+}, /*#__PURE__*/React.createElement("circle", {
+  cx: "12",
+  cy: "8",
+  r: "6"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"
+}));
+
+/* ─── Shared helpers ── */
+const SectionLabel = ({
+  text,
+  light
+}) => /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+    color: light ? '#38bdf8' : ACCENT,
+    marginBottom: 10
+  }
+}, text);
+const SectionTitle = ({
+  text,
+  light
+}) => /*#__PURE__*/React.createElement("h2", {
+  style: {
+    fontSize: 'clamp(26px,3.8vw,40px)',
+    fontWeight: 900,
+    color: light ? '#fff' : '#0f172a',
+    letterSpacing: '-0.9px',
+    lineHeight: 1.15,
+    margin: 0
+  }
+}, text);
+const scrollToSection = key => {
+  const el = document.getElementById(key);
+  if (el) el.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+};
+
+/* ─── Visual Preview Banner for Each Case (Solves "Wall of Text" Problem) ── */
+const CaseVisualPreview = ({
+  c,
+  onClick
+}) => {
+  const themes = {
+    'ecom-tma': {
+      bg: 'linear-gradient(135deg, #07101f 0%, #0c2d48 55%, #087ea4 100%)',
+      accent: '#38bdf8',
+      steps: ['🖥️ SEO-Сайт', '📱 Telegram Mini App', '💳 WayForPay + ТТН', '🤖 3 Боти + Склад']
+    },
+    'prom-b2b': {
+      bg: 'linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #0369a1 100%)',
+      accent: '#f59e0b',
+      steps: ['📊 Прайс CSV/XLSX', '🧠 AI SEO-Описи', '🔒 Захист цін', '🚀 Prom.ua API']
+    },
+    'salesdrive-ai': {
+      bg: 'linear-gradient(135deg, #091526 0%, #1e1b4b 55%, #4338ca 100%)',
+      accent: '#a855f7',
+      steps: ['🔄 SalesDrive CRM', '📈 Чистий попит', '🔥 Хіти / ❄️ Неліквід', '📑 Excel у Telegram']
+    },
+    'craft-catalog': {
+      bg: 'linear-gradient(135deg, #18181b 0%, #27272a 55%, #78350f 100%)',
+      accent: '#fbbf24',
+      steps: ['📲 Трафік з реклами', '⚡ 210+ фото WebP', '🔍 Зручні фільтри', '💬 Замовлення в 1 клік']
+    },
+    'crm-bot': {
+      bg: 'linear-gradient(135deg, #052e16 0%, #064e3b 55%, #0f766e 100%)',
+      accent: '#34d399',
+      steps: ['💬 Звернення 24/7', '🤖 Консультація AI', '📋 Збір 8 пунктів', '✅ Угода в KeyCRM']
+    },
+    'edtech-pwa': {
+      bg: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #2563eb 100%)',
+      accent: '#60a5fa',
+      steps: ['📚 База документів', '⏱️ Симулятор 100 питань', '🧠 Робота над помилками', '📊 Дашборд знань']
+    }
+  };
+  const t = themes[c.visualType] || themes['ecom-tma'];
+  return /*#__PURE__*/React.createElement("div", {
+    onClick: onClick,
+    title: "\u041D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C, \u0449\u043E\u0431 \u043F\u0435\u0440\u0435\u0433\u043B\u044F\u043D\u0443\u0442\u0438 \u0434\u0435\u0442\u0430\u043B\u0456 \u0440\u043E\u0431\u043E\u0442\u0438 \u0441\u0438\u0441\u0442\u0435\u043C\u0438",
+    style: {
+      background: t.bg,
+      borderRadius: 14,
+      padding: '16px 18px',
+      marginBottom: 18,
+      color: '#fff',
+      cursor: 'pointer',
+      position: 'relative',
+      overflow: 'hidden',
+      border: '1px solid rgba(255,255,255,.08)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 8,
+      marginBottom: 14,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 8,
+      height: 8,
+      borderRadius: '50%',
+      background: '#4ade80',
+      display: 'inline-block'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: '#e2e8f0',
+      letterSpacing: .3
+    }
+  }, c.visualBadge)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10.5,
+      fontWeight: 700,
+      color: t.accent,
+      background: 'rgba(255,255,255,.08)',
+      padding: '3px 9px',
+      borderRadius: 100
+    }
+  }, "\u0421\u0445\u0435\u043C\u0430 \u0440\u043E\u0431\u043E\u0442\u0438 \u2197")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(4, 1fr)',
+      gap: 6,
+      marginBottom: 14
+    }
+  }, t.steps.map((st, idx) => /*#__PURE__*/React.createElement("div", {
+    key: idx,
+    style: {
+      background: 'rgba(255,255,255,.08)',
+      border: '1px solid rgba(255,255,255,.12)',
+      borderRadius: 9,
+      padding: '8px 6px',
+      textAlign: 'center',
+      fontSize: 10.5,
+      fontWeight: 700,
+      color: '#f8fafc',
+      lineHeight: 1.3
+    }
+  }, st))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6,
+      flexWrap: 'wrap'
+    }
+  }, c.visualMetrics.map((m, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
+    style: {
+      fontSize: 10.5,
+      fontWeight: 800,
+      color: '#0f172a',
+      background: i === 0 ? t.accent : 'rgba(255,255,255,.9)',
+      padding: '3px 9px',
+      borderRadius: 6
+    }
+  }, m))));
+};
+
+/* ─── useScrollReveal ── */
+const useScrollReveal = dep => {
+  useEffect(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, {
+      threshold: 0.05
+    });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, [dep]);
+};
+
+/* ─── Header ── */
+const Header = ({
+  onNav,
+  active
+}) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', fn, {
+      passive: true
+    });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  const links = [{
+    label: 'Про мене',
+    key: 'about'
+  }, {
+    label: 'Кейси (6)',
+    key: 'cases'
+  }, {
+    label: 'Сертифікати',
+    key: 'certificates'
+  }, {
+    label: 'Відгуки',
+    key: 'reviews'
+  }, {
+    label: 'Ціни',
+    key: 'pricing'
+  }, {
+    label: 'Контакти',
+    key: 'contact'
+  }];
+
+  /* Dark header when at top over Hero, crisp white when scrolled */
+  const hdrStyle = {
+    position: 'sticky',
+    top: 0,
+    zIndex: 100,
+    background: scrolled ? 'rgba(255,255,255,.96)' : 'rgba(7,16,31,.92)',
+    backdropFilter: 'blur(14px)',
+    borderBottom: scrolled ? '1px solid #e2e8f0' : '1px solid rgba(255,255,255,.08)',
+    transition: 'border-color .3s, background .3s'
+  };
+  const btnBase = {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    fontSize: 13.5,
+    fontWeight: 700,
+    padding: '6px 0',
+    position: 'relative',
+    transition: 'color .2s'
+  };
+  const scrollTop = e => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    setOpen(false);
+  };
+  return /*#__PURE__*/React.createElement("header", {
+    style: hdrStyle
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 1180,
+      margin: '0 auto',
+      padding: '0 24px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      height: 68
+    }
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "#top",
+    onClick: scrollTop,
+    style: {
+      textDecoration: 'none',
+      display: 'flex',
+      alignItems: 'baseline',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 900,
+      fontSize: 17,
+      color: scrolled ? '#0f172a' : '#fff',
+      letterSpacing: '-0.5px',
+      transition: 'color .3s'
+    }
+  }, "Roman Myronchuk"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 700,
+      fontSize: 11.5,
+      color: scrolled ? ACCENT : '#38bdf8'
+    },
+    className: "desktop-only"
+  }, "\u2014 AI & E-commerce \u043F\u0456\u0434 \u043A\u043B\u044E\u0447")), /*#__PURE__*/React.createElement("nav", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 22
+    },
+    className: "desktop-only",
+    "aria-label": "\u0413\u043E\u043B\u043E\u0432\u043D\u0430 \u043D\u0430\u0432\u0456\u0433\u0430\u0446\u0456\u044F"
+  }, links.map(l => /*#__PURE__*/React.createElement("button", {
+    key: l.key,
+    onClick: () => onNav(l.key),
+    style: {
+      ...btnBase,
+      color: active === l.key ? scrolled ? ACCENT : '#38bdf8' : scrolled ? '#475569' : '#cbd5e1'
+    }
+  }, l.label, active === l.key && /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: 'absolute',
+      bottom: -2,
+      left: 0,
+      right: 0,
+      height: 2,
+      background: scrolled ? ACCENT : '#38bdf8',
+      borderRadius: 2
+    }
+  }))), /*#__PURE__*/React.createElement("button", {
+    onClick: () => onNav('contact'),
+    style: {
+      background: `linear-gradient(135deg, ${ACCENT} 0%, #0ea5c9 100%)`,
+      color: '#fff',
+      border: 'none',
+      padding: '10px 20px',
+      borderRadius: 9,
+      fontFamily: 'inherit',
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: 'pointer',
+      boxShadow: '0 4px 14px rgba(8,126,164,.35)'
+    }
+  }, "\u0420\u043E\u0437\u0440\u0430\u0445\u0443\u0432\u0430\u0442\u0438 \u043F\u0440\u043E\u0435\u043A\u0442 \u2192")), /*#__PURE__*/React.createElement("button", {
+    className: "mobile-only",
+    onClick: () => setOpen(!open),
+    "aria-label": open ? 'Закрити меню' : 'Відкрити меню',
+    "aria-expanded": open,
+    style: {
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: scrolled ? '#0f172a' : '#fff',
+      padding: 6,
+      display: 'none'
+    }
+  }, open ? /*#__PURE__*/React.createElement(IconX, null) : /*#__PURE__*/React.createElement(IconMenu, null))), open && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: '1px solid #e2e8f0',
+      background: '#fff',
+      paddingBottom: 16,
+      boxShadow: '0 16px 32px rgba(0,0,0,.15)'
+    }
+  }, links.map(l => /*#__PURE__*/React.createElement("button", {
+    key: l.key,
+    onClick: () => {
+      onNav(l.key);
+      setOpen(false);
+    },
+    style: {
+      display: 'block',
+      width: '100%',
+      textAlign: 'left',
+      padding: '13px 24px',
+      background: 'none',
+      border: 'none',
+      fontFamily: 'inherit',
+      fontSize: 15,
+      fontWeight: 700,
+      color: active === l.key ? ACCENT : '#334155',
+      cursor: 'pointer',
+      borderBottom: '1px solid #f8fafc'
+    }
+  }, l.label)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '12px 24px 0'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      onNav('contact');
+      setOpen(false);
+    },
+    style: {
+      width: '100%',
+      background: `linear-gradient(135deg, ${ACCENT} 0%, #0ea5c9 100%)`,
+      color: '#fff',
+      border: 'none',
+      padding: '13px 20px',
+      borderRadius: 10,
+      fontFamily: 'inherit',
+      fontSize: 14,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "\u0420\u043E\u0437\u0440\u0430\u0445\u0443\u0432\u0430\u0442\u0438 \u0432\u0430\u0440\u0442\u0456\u0441\u0442\u044C \u0456 \u0442\u0435\u0440\u043C\u0456\u043D\u0438 \u2192"))));
+};
+
+/* ─── Hero ── */
+const Hero = ({
+  onCTA,
+  onCases
+}) => /*#__PURE__*/React.createElement("section", {
+  id: "top",
+  className: "hero-bg",
+  style: {
+    minHeight: 'calc(100vh - 68px)',
+    display: 'flex',
+    alignItems: 'center'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  className: "hero-inner",
+  style: {
+    maxWidth: 1180,
+    margin: '0 auto',
+    padding: '68px 24px',
+    width: '100%'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  className: "hero-layout",
+  style: {
+    display: 'grid',
+    gridTemplateColumns: '1.2fr 0.8fr',
+    gap: 52,
+    alignItems: 'center'
+  }
+}, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  className: "hero-badge",
+  style: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    background: 'rgba(8,126,164,.16)',
+    border: '1px solid rgba(56,189,248,.3)',
+    padding: '6px 14px',
+    borderRadius: 100,
+    marginBottom: 24
+  }
+}, /*#__PURE__*/React.createElement("span", {
+  className: "pulse",
+  style: {
+    width: 7,
+    height: 7,
+    borderRadius: '50%',
+    background: '#4ade80',
+    display: 'block',
+    boxShadow: '0 0 8px #4ade80'
+  }
+}), /*#__PURE__*/React.createElement("span", {
+  style: {
+    color: '#7dd3fc',
+    fontSize: 12,
+    fontWeight: 700
+  }
+}, "\u0412\u0456\u043B\u044C\u043D\u0438\u0439 \u0434\u043B\u044F \u043D\u043E\u0432\u0438\u0445 \u043F\u0440\u043E\u0435\u043A\u0442\u0456\u0432 \u043F\u0456\u0434 \u043A\u043B\u044E\u0447")), /*#__PURE__*/React.createElement("h1", {
+  style: {
+    fontSize: 'clamp(30px,4.1vw,52px)',
+    fontWeight: 900,
+    color: '#fff',
+    lineHeight: 1.12,
+    letterSpacing: '-1.3px',
+    margin: 0
+  }
+}, "\u0410\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0443\u044E \u043F\u0440\u043E\u0434\u0430\u0436\u0456, \u0441\u043A\u043B\u0430\u0434 \u0442\u0430 \u0430\u043D\u0430\u043B\u0456\u0442\u0438\u043A\u0443 \u0431\u0456\u0437\u043D\u0435\u0441\u0443 \u0447\u0435\u0440\u0435\u0437", ' ', /*#__PURE__*/React.createElement("span", {
+  className: "gradient-text"
+}, "AI \u0442\u0430 Web / Telegram-\u0441\u0438\u0441\u0442\u0435\u043C\u0438")), /*#__PURE__*/React.createElement("p", {
+  style: {
+    marginTop: 22,
+    fontSize: 16,
+    color: '#cbd5e1',
+    lineHeight: 1.75,
+    maxWidth: 580
+  }
+}, "\u0417\u0430\u043C\u0456\u043D\u044E\u044E \u0440\u0443\u0447\u043D\u0443 \u0440\u043E\u0431\u043E\u0442\u0443 \u0437 \u043F\u0440\u0430\u0439\u0441\u0430\u043C\u0438 \u043F\u043E\u0441\u0442\u0430\u0447\u0430\u043B\u044C\u043D\u0438\u043A\u0456\u0432, \u0437\u0430\u043B\u0438\u0448\u043A\u0430\u043C\u0438 \u0439 \u0437\u0430\u044F\u0432\u043A\u0430\u043C\u0438 \u043D\u0430 \u0454\u0434\u0438\u043D\u0443 \u0441\u0438\u0441\u0442\u0435\u043C\u0443 \u043F\u0456\u0434 \u043A\u043B\u044E\u0447: \u0432\u0456\u0434 \u0437\u0440\u0443\u0447\u043D\u043E\u0433\u043E \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0443 \u0439 Telegram Mini App \u0434\u043E \u043F\u043E\u0432\u043D\u043E\u0457 \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0456\u0437\u0430\u0446\u0456\u0457 \u0437 ", /*#__PURE__*/React.createElement("b", null, "SalesDrive, KeyCRM, Prom.ua \u0442\u0430 \u041D\u043E\u0432\u043E\u044E \u041F\u043E\u0448\u0442\u043E\u044E"), ". \u0417\u0430\u043F\u0443\u0441\u043A \u0437\u0430 10\u201320 \u0434\u043D\u0456\u0432 \u0456\u0437 \u0433\u0430\u0440\u0430\u043D\u0442\u0456\u0454\u044E \u0437\u0430 \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u043E\u043C."), /*#__PURE__*/React.createElement("div", {
+  className: "hero-btns",
+  style: {
+    display: 'flex',
+    gap: 12,
+    marginTop: 34,
+    flexWrap: 'wrap'
+  }
+}, /*#__PURE__*/React.createElement("button", {
+  onClick: onCTA,
+  style: {
+    background: `linear-gradient(135deg, ${ACCENT} 0%, #0ea5c9 100%)`,
+    color: '#fff',
+    border: 'none',
+    padding: '15px 28px',
+    borderRadius: 10,
+    fontFamily: 'inherit',
+    fontSize: 15,
+    fontWeight: 800,
+    cursor: 'pointer',
+    boxShadow: '0 8px 28px rgba(8,126,164,.45)'
+  }
+}, "\u0420\u043E\u0437\u0440\u0430\u0445\u0443\u0432\u0430\u0442\u0438 \u0432\u0430\u0440\u0442\u0456\u0441\u0442\u044C \u0456 \u0442\u0435\u0440\u043C\u0456\u043D\u0438 \u2192"), /*#__PURE__*/React.createElement("button", {
+  onClick: onCases,
+  style: {
+    background: 'rgba(255,255,255,.08)',
+    color: '#fff',
+    border: '1px solid rgba(255,255,255,.18)',
+    padding: '15px 22px',
+    borderRadius: 10,
+    fontSize: 14.5,
+    fontWeight: 700,
+    fontFamily: 'inherit',
+    cursor: 'pointer'
+  }
+}, "\u0414\u0438\u0432\u0438\u0442\u0438\u0441\u044F \u0440\u043E\u0431\u043E\u0447\u0456 \u0441\u0438\u0441\u0442\u0435\u043C\u0438 (6)"), /*#__PURE__*/React.createElement("a", {
+  href: "https://t.me/romanmuronchuk",
+  target: "_blank",
+  rel: "noopener noreferrer",
+  style: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 8,
+    background: 'rgba(56,189,248,.12)',
+    color: '#7dd3fc',
+    border: '1px solid rgba(56,189,248,.28)',
+    padding: '15px 20px',
+    borderRadius: 10,
+    fontSize: 14.5,
+    fontWeight: 700,
+    textDecoration: 'none'
+  }
+}, /*#__PURE__*/React.createElement(IconTelegram, {
+  sz: 18
+}), " \u041D\u0430\u043F\u0438\u0441\u0430\u0442\u0438 \u0432 Telegram")), /*#__PURE__*/React.createElement("div", {
+  className: "hero-stats",
+  style: {
+    display: 'flex',
+    gap: 36,
+    marginTop: 48,
+    paddingTop: 32,
+    borderTop: '1px solid rgba(255,255,255,.1)',
+    flexWrap: 'wrap'
+  }
+}, HERO_STATS.map(([val, lbl], i) => /*#__PURE__*/React.createElement("div", {
+  key: i
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 30,
+    fontWeight: 900,
+    color: '#fff',
+    letterSpacing: '-0.8px'
+  }
+}, val), /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 12.5,
+    color: '#94a3b8',
+    marginTop: 4,
+    fontWeight: 600
+  }
+}, lbl))))), /*#__PURE__*/React.createElement("div", {
+  className: "hero-img",
+  style: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    position: 'relative'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  className: "hero-avatar-ring",
+  style: {
+    width: 300,
+    height: 300,
+    borderRadius: '50%',
+    background: `linear-gradient(135deg, ${ACCENT}, #38bdf8)`,
+    padding: 4,
+    boxShadow: '0 0 0 1px rgba(8,126,164,.35), 0 0 60px rgba(8,126,164,.28)'
+  }
+}, /*#__PURE__*/React.createElement("img", {
+  src: "assets/avatar.webp",
+  alt: "\u0420\u043E\u043C\u0430\u043D \u041C\u0438\u0440\u043E\u043D\u0447\u0443\u043A \u2014 \u0440\u043E\u0437\u0440\u043E\u0431\u043A\u0430 AI-\u0441\u0438\u0441\u0442\u0435\u043C \u0442\u0430 E-commerce \u043F\u0456\u0434 \u043A\u043B\u044E\u0447",
+  width: "300",
+  height: "300",
+  fetchPriority: "high",
+  decoding: "async",
+  style: {
+    width: '100%',
+    height: '100%',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    display: 'block'
+  }
+}))), /*#__PURE__*/React.createElement("div", {
+  style: {
+    marginTop: 18,
+    background: 'rgba(15,23,42,.85)',
+    border: '1px solid rgba(56,189,248,.25)',
+    borderRadius: 12,
+    padding: '10px 16px',
+    textAlign: 'center',
+    maxWidth: 310
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 12,
+    fontWeight: 800,
+    color: '#fff'
+  }
+}, "\u0420\u043E\u043C\u0430\u043D \u041C\u0438\u0440\u043E\u043D\u0447\u0443\u043A"), /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 11,
+    color: '#7dd3fc',
+    fontWeight: 600,
+    marginTop: 2
+  }
+}, "\u0421\u0435\u0440\u0442\u0438\u0444\u0456\u043A\u043E\u0432\u0430\u043D\u0438\u0439 AI & Full-Stack \u0441\u043F\u0435\u0446\u0456\u0430\u043B\u0456\u0441\u0442 (Google \u2022 Make AI)"))))));
+
+/* ─── About ── */
+const About = () => /*#__PURE__*/React.createElement("section", {
+  id: "about",
+  className: "sec-pad",
+  style: {
+    background: '#fff',
+    padding: '92px 24px'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    maxWidth: 1180,
+    margin: '0 auto'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  className: "reveal",
+  style: {
+    textAlign: 'center',
+    marginBottom: 56
+  }
+}, /*#__PURE__*/React.createElement(SectionLabel, {
+  text: "\u041F\u0440\u043E \u043C\u0435\u043D\u0435 \u0442\u0430 \u043F\u0456\u0434\u0445\u0456\u0434"
+}), /*#__PURE__*/React.createElement(SectionTitle, {
+  text: "\u0420\u043E\u0431\u043B\u044E \u0442\u0430\u043A, \u0449\u043E\u0431 \u0442\u0435\u0445\u043D\u0456\u043A\u0430 \u043F\u0440\u0430\u0446\u044E\u0432\u0430\u043B\u0430 \u043D\u0430 \u0432\u0430\u0448 \u043F\u0440\u0438\u0431\u0443\u0442\u043E\u043A, \u0430 \u043D\u0435 \u0441\u0442\u0432\u043E\u0440\u044E\u0432\u0430\u043B\u0430 \u0433\u043E\u043B\u043E\u0432\u043D\u0438\u0439 \u0431\u0456\u043B\u044C"
+})), /*#__PURE__*/React.createElement("div", {
+  className: "about-layout",
+  style: {
+    display: 'grid',
+    gridTemplateColumns: '1.05fr 1.1fr',
+    gap: 52,
+    alignItems: 'start'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  className: "reveal"
+}, /*#__PURE__*/React.createElement("p", {
+  style: {
+    fontSize: 15.5,
+    color: '#334155',
+    lineHeight: 1.8,
+    marginBottom: 18
+  }
+}, "\u0411\u0456\u043B\u044C\u0448\u0456\u0441\u0442\u044C \u0442\u043E\u0440\u0433\u043E\u0432\u0438\u0445 \u0431\u0456\u0437\u043D\u0435\u0441\u0456\u0432 \u0432\u0442\u0440\u0430\u0447\u0430\u044E\u0442\u044C \u0447\u0430\u0441 \u0456 \u0433\u0440\u043E\u0448\u0456 \u043D\u0430 \xAB\u0440\u0443\u0447\u043D\u0456\u0439 \u0440\u0443\u0442\u0438\u043D\u0456\xBB: \u043A\u043E\u043B\u0438 \u043F\u0440\u0430\u0439\u0441\u0438 \u043F\u043E\u0441\u0442\u0430\u0447\u0430\u043B\u044C\u043D\u0438\u043A\u0456\u0432 \u0437\u0432\u043E\u0434\u044F\u0442\u044C\u0441\u044F \u043D\u043E\u0447\u0430\u043C\u0438 \u0432 Excel, \u0437\u0430\u043B\u0438\u0448\u043A\u0438 \u0432 SalesDrive \u043D\u0435 \u0437\u0431\u0456\u0433\u0430\u044E\u0442\u044C\u0441\u044F \u0437 \u0441\u0430\u0439\u0442\u043E\u043C \u0447\u0438 Prom.ua, \u0430 \u043C\u0435\u043D\u0435\u0434\u0436\u0435\u0440\u0438 \u0433\u043E\u0434\u0438\u043D\u0430\u043C\u0438 \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u044E\u0442\u044C \u043D\u0430 \u043E\u0434\u043D\u0456 \u0439 \u0442\u0456 \u0441\u0430\u043C\u0456 \u0437\u0430\u043F\u0438\u0442\u0430\u043D\u043D\u044F \u0432 \u043C\u0435\u0441\u0435\u043D\u0434\u0436\u0435\u0440\u0430\u0445."), /*#__PURE__*/React.createElement("p", {
+  style: {
+    fontSize: 15.5,
+    color: '#334155',
+    lineHeight: 1.8,
+    marginBottom: 28
+  }
+}, "\u042F \u0432\u0438\u0440\u0456\u0448\u0443\u044E \u0446\u0456 \u0437\u0430\u0434\u0430\u0447\u0456 ", /*#__PURE__*/React.createElement("b", null, "\u043F\u0456\u0434 \u043A\u043B\u044E\u0447 \u044F\u043A \u043E\u0434\u0438\u043D \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u043B\u044C\u043D\u0438\u0439 \u0432\u0438\u043A\u043E\u043D\u0430\u0432\u0435\u0446\u044C"), ": \u0441\u0430\u043C \u043F\u0440\u043E\u0435\u043A\u0442\u0443\u044E \u0456 \u0441\u0442\u0432\u043E\u0440\u044E\u044E \u0437\u0440\u0443\u0447\u043D\u0438\u0439 \u0441\u0430\u0439\u0442 \u0430\u0431\u043E Telegram-\u043C\u0430\u0433\u0430\u0437\u0438\u043D, \u043F\u0456\u0434\u043A\u043B\u044E\u0447\u0430\u044E \u0431\u0430\u0437\u0443 \u0434\u0430\u043D\u0438\u0445, CRM, \u043E\u043F\u043B\u0430\u0442\u0438 \u0439 \u0434\u043E\u0441\u0442\u0430\u0432\u043A\u0443 \u0442\u0430 \u043D\u0430\u0432\u0447\u0430\u044E \u0448\u0442\u0443\u0447\u043D\u0438\u0439 \u0456\u043D\u0442\u0435\u043B\u0435\u043A\u0442 \u043F\u0440\u0430\u0446\u044E\u0432\u0430\u0442\u0438 \u0441\u0443\u0432\u043E\u0440\u043E \u0437\u0430 \u043F\u0440\u0430\u0432\u0438\u043B\u0430\u043C\u0438 \u0432\u0430\u0448\u043E\u0433\u043E \u0431\u0456\u0437\u043D\u0435\u0441\u0443."), /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: 'flex',
+    gap: 12,
+    flexWrap: 'wrap',
+    marginBottom: 26
+  }
+}, ABOUT_GUARANTEES.map(([v, l]) => /*#__PURE__*/React.createElement("div", {
+  key: l,
+  style: {
+    flex: 1,
+    minWidth: 110,
+    textAlign: 'center',
+    background: '#f0f9ff',
+    borderRadius: 14,
+    padding: '16px 10px',
+    border: '1px solid #bae6fd'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 22,
+    fontWeight: 900,
+    color: ACCENT
+  }
+}, v), /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 11,
+    fontWeight: 700,
+    color: '#334155',
+    marginTop: 4,
+    lineHeight: 1.35
+  }
+}, l)))), /*#__PURE__*/React.createElement("div", {
+  className: "approach-box",
+  style: {
+    background: '#f8fafc',
+    border: '1px solid #e2e8f0',
+    borderRadius: 16,
+    padding: 24
+  }
+}, /*#__PURE__*/React.createElement("h3", {
+  style: {
+    fontSize: 14,
+    fontWeight: 800,
+    color: '#0f172a',
+    marginBottom: 14
+  }
+}, "\u0427\u043E\u043C\u0443 \u0432\u043B\u0430\u0441\u043D\u0438\u043A\u0430\u043C \u0431\u0456\u0437\u043D\u0435\u0441\u0443 \u0441\u043F\u043E\u043A\u0456\u0439\u043D\u043E \u043F\u0440\u0430\u0446\u044E\u0432\u0430\u0442\u0438 \u0437\u0456 \u043C\u043D\u043E\u044E:"), ['Один спеціаліст замість 3 підрядників: закриваю і видиму частину (сайт/бот), і внутрішню логіку, і запуск на сервері', 'AI, якому можна довірити гроші й прайси: система ніколи не вигадає неіснуючу ціну, знижку чи залишок на складі', 'Готові напрацювання для України: швидка інтеграція з SalesDrive, KeyCRM, Prom.ua, Новою Поштою та WayForPay', 'Усі звіти й замовлення як на долоні: ви отримуєте сповіщення, аналітику та готові Excel-бланки прямо у свій Telegram'].map((item, i) => /*#__PURE__*/React.createElement("div", {
+  key: i,
+  style: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: 10,
+    marginBottom: 11,
+    color: '#334155',
+    fontSize: 13.5,
+    lineHeight: 1.55
+  }
+}, /*#__PURE__*/React.createElement("span", {
+  style: {
+    color: ACCENT
+  }
+}, /*#__PURE__*/React.createElement(IconCheck, null)), /*#__PURE__*/React.createElement("span", null, item))))), /*#__PURE__*/React.createElement("div", {
+  className: "reveal delay-1"
+}, /*#__PURE__*/React.createElement("h3", {
+  style: {
+    fontSize: 11.5,
+    fontWeight: 800,
+    color: '#0f172a',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    marginBottom: 16
+  }
+}, "\u0406\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u0438 \u0442\u0430 \u0442\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0456\u0457, \u0437 \u044F\u043A\u0438\u043C\u0438 \u044F \u043F\u0440\u0430\u0446\u044E\u044E"), /*#__PURE__*/React.createElement("div", {
+  className: "tech-grid",
+  style: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2,1fr)',
+    gap: 12
+  }
+}, TECH_CATEGORIES.map(cat => /*#__PURE__*/React.createElement("div", {
+  key: cat.label,
+  style: {
+    background: '#f8fafc',
+    border: '1px solid #e2e8f0',
+    borderRadius: 14,
+    padding: '15px 16px'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 10.5,
+    fontWeight: 800,
+    color: '#0f172a',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 10
+  }
+}, cat.label), /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 6
+  }
+}, cat.items.map(t => /*#__PURE__*/React.createElement("span", {
+  key: t,
+  className: "tech-badge"
+}, t))))))))));
+
+/* ─── Case Modal (Technical deep dive without repeating card text) ── */
+const CaseModal = ({
+  item,
+  onClose,
+  onNavContact
+}) => {
+  useEffect(() => {
+    if (!item) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = e => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [item, onClose]);
+  if (!item) return null;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "modal-backdrop",
+    onClick: onClose,
+    role: "dialog",
+    "aria-modal": "true",
+    "aria-labelledby": "modal-case-title"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal-card",
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal-sticky-hd"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: item.tagCls,
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      padding: '5px 13px',
+      borderRadius: 100,
+      display: 'inline-block'
+    }
+  }, item.tag), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    "aria-label": "\u0417\u0430\u043A\u0440\u0438\u0442\u0438 \u0432\u0456\u043A\u043D\u043E",
+    style: {
+      background: '#f1f5f9',
+      border: 'none',
+      width: 36,
+      height: 36,
+      borderRadius: 10,
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#334155'
+    }
+  }, /*#__PURE__*/React.createElement(IconX, null))), /*#__PURE__*/React.createElement("h3", {
+    id: "modal-case-title",
+    style: {
+      fontSize: 21,
+      fontWeight: 900,
+      color: '#0f172a',
+      lineHeight: 1.3,
+      marginBottom: 16
+    }
+  }, item.title), /*#__PURE__*/React.createElement(CaseVisualPreview, {
+    c: item,
+    onClick: () => {}
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: '#f8fafc',
+      border: '1px solid #e2e8f0',
+      borderRadius: 14,
+      padding: '16px 18px',
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 800,
+      color: ACCENT,
+      textTransform: 'uppercase',
+      letterSpacing: 1.3,
+      marginBottom: 6
+    }
+  }, "\u2699\uFE0F \u042F\u043A \u0446\u0435 \u043F\u0440\u0430\u0446\u044E\u0454 \u043A\u0440\u043E\u043A \u0437\u0430 \u043A\u0440\u043E\u043A\u043E\u043C"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13.5,
+      color: '#334155',
+      lineHeight: 1.65
+    }
+  }, item.howItWorks)), item.details && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: '#f0f9ff',
+      border: '1px solid #bae6fd',
+      borderRadius: 14,
+      padding: '16px 18px',
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 800,
+      color: '#0369a1',
+      textTransform: 'uppercase',
+      letterSpacing: 1.3,
+      marginBottom: 6
+    }
+  }, "\uD83C\uDFD7\uFE0F \u0422\u0435\u0445\u043D\u0456\u0447\u043D\u0430 \u043D\u0430\u0434\u0456\u0439\u043D\u0456\u0441\u0442\u044C \u043F\u0456\u0434 \u043A\u0430\u043F\u043E\u0442\u043E\u043C"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: '#0f172a',
+      lineHeight: 1.6,
+      marginBottom: 10
+    }
+  }, item.details.architecture), item.details.highlights.map((h, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: 8,
+      marginBottom: 7,
+      fontSize: 13,
+      color: '#334155',
+      lineHeight: 1.5
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: ACCENT
+    }
+  }, /*#__PURE__*/React.createElement(IconCheck, null)), /*#__PURE__*/React.createElement("span", null, h)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 22
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10.5,
+      fontWeight: 800,
+      color: '#64748b',
+      textTransform: 'uppercase',
+      letterSpacing: 1.2,
+      marginBottom: 8
+    }
+  }, "\u0412\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u0430\u043D\u0456 \u0442\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0456\u0457 \u0442\u0430 \u0456\u043D\u0442\u0435\u0433\u0440\u0430\u0446\u0456\u0457"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: 6
+    }
+  }, item.stack.map(s => /*#__PURE__*/React.createElement("span", {
+    key: s,
+    className: "case-stack-chip"
+  }, s)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: 10,
+      borderTop: '1px solid #f1f5f9',
+      paddingTop: 18
+    }
+  }, item.links.map((lnk, idx) => lnk.type === 'internal' ? /*#__PURE__*/React.createElement("button", {
+    key: idx,
+    onClick: () => {
+      onClose();
+      onNavContact(lnk.planHint || item.title);
+    },
+    className: "case-link-btn case-link-primary"
+  }, lnk.label, " \u2192") : /*#__PURE__*/React.createElement("a", {
+    key: idx,
+    href: lnk.href,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: `case-link-btn ${idx === 0 ? 'case-link-primary' : 'case-link-secondary'}`
+  }, lnk.type === 'github' && /*#__PURE__*/React.createElement(IconGithub, {
+    sz: 14
+  }), lnk.type === 'live' && /*#__PURE__*/React.createElement(IconExternal, {
+    sz: 14
+  }), lnk.type === 'tg' && /*#__PURE__*/React.createElement(IconTelegram, {
+    sz: 14
+  }), lnk.label)), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      onClose();
+      onNavContact(`Хочу подібне рішення: ${item.title}`);
+    },
+    className: "case-link-btn case-link-secondary",
+    style: {
+      marginLeft: 'auto'
+    }
+  }, "\u0425\u043E\u0447\u0443 \u043F\u043E\u0434\u0456\u0431\u043D\u0443 \u0441\u0438\u0441\u0442\u0435\u043C\u0443 \u0434\u043B\u044F \u0441\u0432\u043E\u0433\u043E \u0431\u0456\u0437\u043D\u0435\u0441\u0443 \u2192"))));
+};
+
+/* ─── Case Card (Clean "Problem → Solution → Result" without duplicate buttons or hover lag) ── */
+const CaseCard = ({
+  c,
+  onOpenDetail,
+  onNavContact
+}) => /*#__PURE__*/React.createElement("div", {
+  className: "reveal visible case-card-wrap"
+}, /*#__PURE__*/React.createElement("div", {
+  className: "case-card-inner",
+  style: {
+    background: '#fff',
+    border: '1px solid #e2e8f0',
+    borderRadius: 20,
+    padding: 26,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    boxShadow: '0 4px 14px rgba(15,23,42,.04)'
+  }
+}, /*#__PURE__*/React.createElement(CaseVisualPreview, {
+  c: c,
+  onClick: () => onOpenDetail(c)
+}), /*#__PURE__*/React.createElement("div", {
+  style: {
+    marginBottom: 10
+  }
+}, /*#__PURE__*/React.createElement("span", {
+  className: c.tagCls,
+  style: {
+    fontSize: 11,
+    fontWeight: 700,
+    padding: '4px 11px',
+    borderRadius: 100,
+    display: 'inline-block'
+  }
+}, c.tag)), /*#__PURE__*/React.createElement("h3", {
+  style: {
+    fontSize: 18.5,
+    fontWeight: 800,
+    color: '#0f172a',
+    margin: '0 0 12px',
+    letterSpacing: '-0.3px',
+    lineHeight: 1.3
+  }
+}, c.title), /*#__PURE__*/React.createElement("div", {
+  style: {
+    background: '#fff1f2',
+    border: '1px solid #fecdd3',
+    borderRadius: 12,
+    padding: '10px 13px',
+    marginBottom: 14
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 10.5,
+    fontWeight: 800,
+    color: '#be123c',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 3
+  }
+}, "\uD83D\uDED1 \u042F\u043A\u0430 \u0431\u0443\u043B\u0430 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0430 (\u0422\u043E\u0447\u043A\u0430 \u0410)"), /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 12.5,
+    color: '#881337',
+    lineHeight: 1.5
+  }
+}, c.problem)), /*#__PURE__*/React.createElement("div", {
+  style: {
+    marginBottom: 14
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 10.5,
+    fontWeight: 800,
+    color: '#475569',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    marginBottom: 8
+  }
+}, "\u2699\uFE0F \u0429\u043E \u0440\u0435\u0430\u043B\u0456\u0437\u043E\u0432\u0430\u043D\u043E \u043F\u0456\u0434 \u043A\u043B\u044E\u0447"), c.features.map((f, i) => /*#__PURE__*/React.createElement("div", {
+  key: i,
+  style: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: 8,
+    marginBottom: 7,
+    color: '#334155',
+    fontSize: 12.8,
+    lineHeight: 1.5
+  }
+}, /*#__PURE__*/React.createElement("span", {
+  style: {
+    color: ACCENT,
+    marginTop: 1
+  }
+}, /*#__PURE__*/React.createElement(IconCheck, null)), /*#__PURE__*/React.createElement("span", null, f)))), /*#__PURE__*/React.createElement("div", {
+  style: {
+    background: '#f0fdf4',
+    border: '1px solid #bbf7d0',
+    borderRadius: 12,
+    padding: '11px 14px',
+    marginBottom: 16,
+    marginTop: 'auto'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 10.5,
+    fontWeight: 800,
+    color: '#15803d',
+    textTransform: 'uppercase',
+    letterSpacing: 1.1,
+    marginBottom: 3
+  }
+}, "\uD83D\uDCC8 \u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u0434\u043B\u044F \u0432\u043B\u0430\u0441\u043D\u0438\u043A\u0430 \u0431\u0456\u0437\u043D\u0435\u0441\u0443 (\u0422\u043E\u0447\u043A\u0430 \u0411)"), /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 12.8,
+    color: '#14532d',
+    fontWeight: 700,
+    lineHeight: 1.5
+  }
+}, c.benefit)), /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 5,
+    marginBottom: 16
+  }
+}, c.stack.map(s => /*#__PURE__*/React.createElement("span", {
+  key: s,
+  className: "case-stack-chip"
+}, s))), /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    paddingTop: 14,
+    borderTop: '1px solid #f1f5f9',
+    flexWrap: 'wrap'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: 'flex',
+    gap: 8,
+    flexWrap: 'wrap'
+  }
+}, c.links.map((lnk, i) => lnk.type === 'internal' ? /*#__PURE__*/React.createElement("button", {
+  key: i,
+  onClick: () => onNavContact(lnk.planHint || c.title),
+  className: "case-link-btn case-link-primary"
+}, lnk.label, " \u2192") : /*#__PURE__*/React.createElement("a", {
+  key: i,
+  href: lnk.href,
+  target: "_blank",
+  rel: "noopener noreferrer",
+  className: `case-link-btn ${i === 0 ? 'case-link-primary' : 'case-link-secondary'}`
+}, lnk.type === 'github' && /*#__PURE__*/React.createElement(IconGithub, {
+  sz: 13
+}), lnk.type === 'live' && /*#__PURE__*/React.createElement(IconExternal, {
+  sz: 13
+}), lnk.type === 'tg' && /*#__PURE__*/React.createElement(IconTelegram, {
+  sz: 13
+}), lnk.label))), /*#__PURE__*/React.createElement("button", {
+  onClick: () => onOpenDetail(c),
+  className: "case-link-btn case-link-secondary"
+}, "\u042F\u043A \u0446\u0435 \u043F\u0440\u0430\u0446\u044E\u0454 \u0432\u0441\u0435\u0440\u0435\u0434\u0438\u043D\u0456"))));
+const Cases = ({
+  onNavContact
+}) => {
+  const [filter, setFilter] = useState('all');
+  const [selectedCase, setSelectedCase] = useState(null);
+  const filteredCases = filter === 'all' ? CASES : CASES.filter(c => c.categories.includes(filter));
+  return /*#__PURE__*/React.createElement("section", {
+    id: "cases",
+    className: "sec-pad",
+    style: {
+      background: '#f8fafc',
+      padding: '92px 24px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 1180,
+      margin: '0 auto'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "reveal",
+    style: {
+      textAlign: 'center',
+      marginBottom: 34
+    }
+  }, /*#__PURE__*/React.createElement(SectionLabel, {
+    text: "\u041F\u043E\u0440\u0442\u0444\u043E\u043B\u0456\u043E \u0442\u0430 \u041A\u0435\u0439\u0441\u0438"
+  }), /*#__PURE__*/React.createElement(SectionTitle, {
+    text: "\u0420\u0435\u0430\u043B\u044C\u043D\u0456 \u0432\u043F\u0440\u043E\u0432\u0430\u0434\u0436\u0435\u043D\u0456 \u0441\u0438\u0441\u0442\u0435\u043C\u0438 \u2014 \u0437 \u0446\u0438\u0444\u0440\u0430\u043C\u0438 \u0442\u0430 \u0436\u0438\u0432\u0438\u043C\u0438 \u043F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F\u043C\u0438"
+  }), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 15,
+      color: '#475569',
+      maxWidth: 660,
+      margin: '12px auto 0',
+      lineHeight: 1.6
+    }
+  }, "\u041D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \u043D\u0430 \u0431\u0443\u0434\u044C-\u044F\u043A\u0438\u0439 \u0436\u0438\u0432\u0438\u0439 \u043C\u0430\u0433\u0430\u0437\u0438\u043D \u0430\u0431\u043E \u0431\u043E\u0442, \u0449\u043E\u0431 \u043F\u0440\u043E\u0442\u0435\u0441\u0442\u0443\u0432\u0430\u0442\u0438 \u0439\u043E\u0433\u043E \u043E\u0441\u043E\u0431\u0438\u0441\u0442\u043E, \u0430\u0431\u043E \u0432\u0456\u0434\u043A\u0440\u0438\u0439\u0442\u0435 \u0441\u0445\u0435\u043C\u0443 \u0440\u043E\u0431\u043E\u0442\u0438 \u0441\u0438\u0441\u0442\u0435\u043C\u0438")), /*#__PURE__*/React.createElement("div", {
+    className: "reveal",
+    style: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: 10,
+      flexWrap: 'wrap',
+      marginBottom: 40
+    }
+  }, CASE_CATEGORIES.map(cat => /*#__PURE__*/React.createElement("button", {
+    key: cat.id,
+    onClick: () => setFilter(cat.id),
+    className: `filter-pill${filter === cat.id ? ' active' : ''}`
+  }, cat.label))), /*#__PURE__*/React.createElement("div", {
+    className: "cases-layout",
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(2,1fr)',
+      gap: 26
+    }
+  }, filteredCases.map(c => /*#__PURE__*/React.createElement(CaseCard, {
+    key: c.id,
+    c: c,
+    onOpenDetail: setSelectedCase,
+    onNavContact: onNavContact
+  })))), /*#__PURE__*/React.createElement(CaseModal, {
+    item: selectedCase,
+    onClose: () => setSelectedCase(null),
+    onNavContact: onNavContact
+  }));
+};
+
+/* ─── Certificates Section + Lightbox Modal ── */
+const CertificateModal = ({
+  cert,
+  onClose
+}) => {
+  useEffect(() => {
+    if (!cert) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = e => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [cert, onClose]);
+  if (!cert) return null;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "modal-backdrop",
+    onClick: onClose,
+    role: "dialog",
+    "aria-modal": "true",
+    "aria-labelledby": "cert-modal-title"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal-card",
+    style: {
+      maxWidth: 880
+    },
+    onClick: e => e.stopPropagation()
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal-sticky-hd"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 800,
+      color: ACCENT,
+      textTransform: 'uppercase',
+      letterSpacing: 1.2
+    }
+  }, cert.issuer), /*#__PURE__*/React.createElement("h3", {
+    id: "cert-modal-title",
+    style: {
+      fontSize: 18,
+      fontWeight: 900,
+      color: '#0f172a',
+      marginTop: 2
+    }
+  }, cert.title)), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    "aria-label": "\u0417\u0430\u043A\u0440\u0438\u0442\u0438 \u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043A\u0430\u0442",
+    style: {
+      background: '#f1f5f9',
+      border: 'none',
+      width: 36,
+      height: 36,
+      borderRadius: 10,
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#334155'
+    }
+  }, /*#__PURE__*/React.createElement(IconX, null))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: '#f8fafc',
+      borderRadius: 14,
+      padding: 12,
+      border: '1px solid #e2e8f0',
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: cert.img,
+    alt: `Сертифікат: ${cert.title} — Роман Мирончук`,
+    style: {
+      width: '100%',
+      height: 'auto',
+      borderRadius: 10,
+      display: 'block'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      gap: 10,
+      fontSize: 13,
+      color: '#475569'
+    }
+  }, /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, cert.score), " \u2022 ", cert.code), /*#__PURE__*/React.createElement("span", null, "\u0414\u0430\u0442\u0430 \u0432\u0438\u0434\u0430\u0447\u0456: ", /*#__PURE__*/React.createElement("b", null, cert.date)))));
+};
+const Certificates = () => {
+  const [activeCert, setActiveCert] = useState(null);
+  return /*#__PURE__*/React.createElement("section", {
+    id: "certificates",
+    className: "sec-pad",
+    style: {
+      background: '#fff',
+      padding: '92px 24px',
+      borderTop: '1px solid #f1f5f9'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 1180,
+      margin: '0 auto'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "reveal",
+    style: {
+      textAlign: 'center',
+      marginBottom: 52
+    }
+  }, /*#__PURE__*/React.createElement(SectionLabel, {
+    text: "\u041F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0436\u0435\u043D\u0430 \u043A\u0432\u0430\u043B\u0456\u0444\u0456\u043A\u0430\u0446\u0456\u044F"
+  }), /*#__PURE__*/React.createElement(SectionTitle, {
+    text: "\u041F\u0440\u043E\u0444\u0456\u043B\u044C\u043D\u0456 \u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043A\u0430\u0442\u0438 \u0437 AI \u0442\u0430 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0430\u0446\u0456\u0457 \u0431\u0456\u0437\u043D\u0435\u0441\u0443"
+  }), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 15,
+      color: '#475569',
+      maxWidth: 620,
+      margin: '12px auto 0',
+      lineHeight: 1.6
+    }
+  }, "\u041F\u043E\u0454\u0434\u043D\u0443\u044E \u0456\u043D\u0436\u0435\u043D\u0435\u0440\u043D\u0438\u0439 \u0434\u043E\u0441\u0432\u0456\u0434 \u0440\u043E\u0437\u0440\u043E\u0431\u043A\u0438 \u0437 \u043E\u0444\u0456\u0446\u0456\u0439\u043D\u043E\u044E \u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043A\u0430\u0446\u0456\u0454\u044E \u0432\u0456\u0434 Google, \u041C\u0456\u043D\u0435\u043A\u043E\u043D\u043E\u043C\u0456\u043A\u0438 \u0423\u043A\u0440\u0430\u0457\u043D\u0438 \u0442\u0430 \u043F\u0440\u043E\u0444\u0456\u043B\u044C\u043D\u0438\u0445 AI-\u0430\u043A\u0430\u0434\u0435\u043C\u0456\u0439 (\u043D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \u043D\u0430 \u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043A\u0430\u0442 \u0434\u043B\u044F \u0437\u0431\u0456\u043B\u044C\u0448\u0435\u043D\u043D\u044F)")), /*#__PURE__*/React.createElement("div", {
+    className: "certs-layout",
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 24
+    }
+  }, CERTIFICATES.map(cert => /*#__PURE__*/React.createElement("div", {
+    key: cert.id,
+    onClick: () => setActiveCert(cert),
+    className: "reveal visible cert-card",
+    style: {
+      background: '#fff',
+      border: '1px solid #e2e8f0',
+      borderRadius: 20,
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      boxShadow: '0 4px 16px rgba(15,23,42,.05)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative',
+      background: '#f1f5f9',
+      padding: 14,
+      borderBottom: '1px solid #e2e8f0'
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: cert.img,
+    alt: `Сертифікат ${cert.title} — ${cert.issuer}`,
+    loading: "lazy",
+    decoding: "async",
+    width: "440",
+    height: "315",
+    style: {
+      width: '100%',
+      height: 210,
+      objectFit: 'cover',
+      objectPosition: 'center top',
+      borderRadius: 10,
+      display: 'block',
+      boxShadow: '0 4px 12px rgba(0,0,0,.08)'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      position: 'absolute',
+      top: 22,
+      right: 22,
+      background: 'rgba(7,16,31,.82)',
+      color: '#fff',
+      fontSize: 10.5,
+      fontWeight: 700,
+      padding: '4px 10px',
+      borderRadius: 100,
+      backdropFilter: 'blur(4px)'
+    }
+  }, "\uD83D\uDD0D \u041D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0433\u043B\u044F\u0434\u0443")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 22,
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6,
+      fontSize: 11,
+      fontWeight: 800,
+      color: ACCENT,
+      textTransform: 'uppercase',
+      letterSpacing: 0.8,
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement(IconAward, {
+    sz: 15
+  }), /*#__PURE__*/React.createElement("span", null, cert.issuer)), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 17,
+      fontWeight: 800,
+      color: '#0f172a',
+      lineHeight: 1.3,
+      marginBottom: 8
+    }
+  }, cert.title), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: '#475569',
+      lineHeight: 1.6,
+      marginBottom: 16,
+      flex: 1
+    }
+  }, cert.desc), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: '#f8fafc',
+      border: '1px solid #e2e8f0',
+      borderRadius: 10,
+      padding: '9px 12px',
+      fontSize: 11.5,
+      color: '#334155',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 8,
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 800,
+      color: '#047857'
+    }
+  }, "\u2713 ", cert.score), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: '#64748b',
+      fontWeight: 600
+    }
+  }, cert.date))))))), /*#__PURE__*/React.createElement(CertificateModal, {
+    cert: activeCert,
+    onClose: () => setActiveCert(null)
+  }));
+};
+
+/* ─── Reviews / Social Proof Section ── */
+const Reviews = () => /*#__PURE__*/React.createElement("section", {
+  id: "reviews",
+  className: "sec-pad",
+  style: {
+    background: '#f8fafc',
+    padding: '88px 24px',
+    borderTop: '1px solid #e2e8f0'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    maxWidth: 1180,
+    margin: '0 auto'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  className: "reveal",
+  style: {
+    textAlign: 'center',
+    marginBottom: 52
+  }
+}, /*#__PURE__*/React.createElement(SectionLabel, {
+  text: "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u0438 \u043A\u043B\u0456\u0454\u043D\u0442\u0456\u0432"
+}), /*#__PURE__*/React.createElement(SectionTitle, {
+  text: "\u0429\u043E \u043A\u0430\u0436\u0443\u0442\u044C \u0437\u0430\u043C\u043E\u0432\u043D\u0438\u043A\u0438 \u043F\u0456\u0441\u043B\u044F \u0432\u043F\u0440\u043E\u0432\u0430\u0434\u0436\u0435\u043D\u043D\u044F \u0441\u0438\u0441\u0442\u0435\u043C"
+})), /*#__PURE__*/React.createElement("div", {
+  className: "reviews-layout",
+  style: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: 24
+  }
+}, REVIEWS.map((r, idx) => /*#__PURE__*/React.createElement("div", {
+  key: idx,
+  className: "reveal visible",
+  style: {
+    background: '#fff',
+    border: '1px solid #e2e8f0',
+    borderRadius: 20,
+    padding: 28,
+    display: 'flex',
+    flexDirection: 'column',
+    boxShadow: '0 4px 14px rgba(15,23,42,.04)'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: 'flex',
+    gap: 3,
+    color: '#f59e0b',
+    fontSize: 16,
+    marginBottom: 12
+  },
+  "aria-label": "\u041E\u0446\u0456\u043D\u043A\u0430 5 \u0437 5"
+}, "\u2605\u2605\u2605\u2605\u2605"), /*#__PURE__*/React.createElement("p", {
+  style: {
+    fontSize: 13.8,
+    color: '#334155',
+    lineHeight: 1.7,
+    fontStyle: 'italic',
+    marginBottom: 20,
+    flex: 1
+  }
+}, r.text), /*#__PURE__*/React.createElement("div", {
+  style: {
+    background: '#f0fdf4',
+    border: '1px solid #bbf7d0',
+    borderRadius: 10,
+    padding: '8px 12px',
+    fontSize: 12,
+    fontWeight: 700,
+    color: '#166534',
+    marginBottom: 14
+  }
+}, "\uD83D\uDE80 ", r.metric), /*#__PURE__*/React.createElement("div", {
+  style: {
+    borderTop: '1px solid #f1f5f9',
+    paddingTop: 12
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 13,
+    fontWeight: 800,
+    color: '#0f172a'
+  }
+}, r.project), /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 12,
+    color: '#64748b',
+    marginTop: 2
+  }
+}, r.role)))))));
+
+/* ─── Pricing ── */
+const PricingCard = ({
+  plan,
+  onSelect
+}) => {
+  const {
+    name,
+    price,
+    timeline,
+    sub,
+    features,
+    popular
+  } = plan;
+  return /*#__PURE__*/React.createElement("div", {
+    className: `reveal visible pricing-card-base${popular ? ' pricing-popular-card' : ''}`,
+    style: {
+      position: 'relative',
+      background: popular ? '#07101f' : '#fff',
+      border: popular ? '1px solid rgba(56,189,248,.45)' : '1px solid #e2e8f0',
+      borderRadius: 20,
+      padding: 32,
+      display: 'flex',
+      flexDirection: 'column',
+      boxShadow: popular ? '0 24px 64px rgba(8,126,164,.2)' : '0 2px 10px rgba(0,0,0,.04)',
+      transform: popular ? 'scale(1.03)' : 'none'
+    }
+  }, popular && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      top: -14,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      background: `linear-gradient(135deg,${ACCENT},#0ea5c9)`,
+      color: '#fff',
+      fontSize: 11,
+      fontWeight: 800,
+      padding: '6px 18px',
+      borderRadius: 100,
+      whiteSpace: 'nowrap',
+      boxShadow: '0 4px 14px rgba(8,126,164,.4)'
+    }
+  }, "\u2B50 \u041D\u0430\u0439\u0447\u0430\u0441\u0442\u0456\u0448\u0438\u0439 \u0432\u0438\u0431\u0456\u0440 \u0431\u0456\u0437\u043D\u0435\u0441\u0443"), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 12,
+      fontWeight: 800,
+      color: popular ? '#38bdf8' : ACCENT,
+      textTransform: 'uppercase',
+      letterSpacing: 1.5,
+      marginBottom: 10
+    }
+  }, name), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 34,
+      fontWeight: 900,
+      color: popular ? '#fff' : '#0f172a',
+      letterSpacing: '-1.2px',
+      marginBottom: 6
+    }
+  }, price), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'inline-block',
+      alignSelf: 'flex-start',
+      fontSize: 11.5,
+      fontWeight: 700,
+      color: popular ? '#7dd3fc' : '#0369a1',
+      background: popular ? 'rgba(56,189,248,.12)' : '#f0f9ff',
+      padding: '4px 10px',
+      borderRadius: 6,
+      marginBottom: 12
+    }
+  }, "\u23F1 ", timeline), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: popular ? '#cbd5e1' : '#475569',
+      marginBottom: 22,
+      lineHeight: 1.5
+    }
+  }, sub), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${popular ? 'rgba(255,255,255,.1)' : '#f1f5f9'}`,
+      paddingTop: 20,
+      flex: 1
+    }
+  }, features.map((f, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: 10,
+      marginBottom: 13,
+      color: popular ? '#e2e8f0' : '#334155',
+      fontSize: 13.3,
+      lineHeight: 1.5
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: popular ? '#38bdf8' : ACCENT
+    }
+  }, /*#__PURE__*/React.createElement(IconCheck, null)), /*#__PURE__*/React.createElement("span", null, f)))), /*#__PURE__*/React.createElement("button", {
+    onClick: () => onSelect(`Цікавить пакет «${name} (${price})». Моя задача: `),
+    style: {
+      width: '100%',
+      marginTop: 24,
+      padding: '14px 18px',
+      background: popular ? `linear-gradient(135deg,${ACCENT},#0ea5c9)` : '#f0f9ff',
+      border: popular ? 'none' : `1.5px solid ${ACCENT}`,
+      color: popular ? '#fff' : ACCENT,
+      borderRadius: 10,
+      fontFamily: 'inherit',
+      fontSize: 13.5,
+      fontWeight: 800,
+      cursor: 'pointer',
+      transition: 'all .2s',
+      boxShadow: popular ? '0 8px 24px rgba(8,126,164,.35)' : 'none'
+    }
+  }, "\u0417\u0430\u043C\u043E\u0432\u0438\u0442\u0438 \u0440\u043E\u0437\u0440\u0430\u0445\u0443\u043D\u043E\u043A \u0437\u0430 \u0446\u0438\u043C \u043F\u0430\u043A\u0435\u0442\u043E\u043C \u2192"));
+};
+const Pricing = ({
+  onSelect
+}) => /*#__PURE__*/React.createElement("section", {
+  id: "pricing",
+  className: "sec-pad",
+  style: {
+    background: '#fff',
+    padding: '92px 24px'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    maxWidth: 1180,
+    margin: '0 auto'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  className: "reveal",
+  style: {
+    textAlign: 'center',
+    marginBottom: 64
+  }
+}, /*#__PURE__*/React.createElement(SectionLabel, {
+  text: "\u041F\u0430\u043A\u0435\u0442\u0438 \u043F\u043E\u0441\u043B\u0443\u0433 \u0442\u0430 \u0446\u0456\u043D\u0438"
+}), /*#__PURE__*/React.createElement(SectionTitle, {
+  text: "\u041F\u0440\u043E\u0437\u043E\u0440\u0456 \u0444\u043E\u0440\u043C\u0430\u0442\u0438 \u0440\u043E\u0437\u0440\u043E\u0431\u043A\u0438 \u043F\u0456\u0434 \u043A\u043B\u044E\u0447"
+}), /*#__PURE__*/React.createElement("p", {
+  style: {
+    fontSize: 15,
+    color: '#475569',
+    maxWidth: 600,
+    margin: '12px auto 0',
+    lineHeight: 1.6
+  }
+}, "\u041E\u0431\u0435\u0440\u0456\u0442\u044C \u0433\u043E\u0442\u043E\u0432\u0438\u0439 \u0444\u043E\u0440\u043C\u0430\u0442 \u0430\u0431\u043E \u043D\u0430\u043F\u0438\u0448\u0456\u0442\u044C \u043C\u0435\u043D\u0456 \u0434\u043B\u044F \u0431\u0435\u0437\u043A\u043E\u0448\u0442\u043E\u0432\u043D\u043E\u0457 \u043E\u0446\u0456\u043D\u043A\u0438 \u0432\u0430\u0448\u043E\u0457 \u0437\u0430\u0434\u0430\u0447\u0456. \u0422\u043E\u0447\u043D\u0430 \u0432\u0430\u0440\u0442\u0456\u0441\u0442\u044C \u0456 \u0442\u0435\u0440\u043C\u0456\u043D\u0438 \u0444\u0456\u043A\u0441\u0443\u044E\u0442\u044C\u0441\u044F \u0434\u043E \u0441\u0442\u0430\u0440\u0442\u0443 \u0440\u043E\u0431\u0456\u0442.")), /*#__PURE__*/React.createElement("div", {
+  className: "pricing-layout",
+  style: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3,1fr)',
+    gap: 24,
+    alignItems: 'stretch',
+    paddingTop: 12
+  }
+}, PLANS.map((p, i) => /*#__PURE__*/React.createElement(PricingCard, {
+  key: i,
+  plan: p,
+  onSelect: onSelect
+}))), /*#__PURE__*/React.createElement("div", {
+  className: "reveal",
+  style: {
+    marginTop: 52,
+    background: '#f8fafc',
+    border: '1px solid #e2e8f0',
+    borderRadius: 20,
+    padding: '28px 28px'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    fontSize: 11.5,
+    fontWeight: 800,
+    color: ACCENT,
+    textTransform: 'uppercase',
+    letterSpacing: 1.8,
+    marginBottom: 18,
+    textAlign: 'center'
+  }
+}, "\uD83D\uDEE1\uFE0F \u042F\u043A \u043C\u0438 \u043F\u0440\u0430\u0446\u044E\u0454\u043C\u043E: \u0431\u0435\u0437\u043F\u0435\u043A\u0430 \u0442\u0430 \u0433\u0430\u0440\u0430\u043D\u0442\u0456\u0457 \u0434\u043B\u044F \u0437\u0430\u043C\u043E\u0432\u043D\u0438\u043A\u0430"), /*#__PURE__*/React.createElement("div", {
+  className: "policy-grid",
+  style: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4,1fr)',
+    gap: 18
+  }
+}, COOPERATION_POLICY.map((item, idx) => /*#__PURE__*/React.createElement("div", {
+  key: idx,
+  style: {
+    background: '#fff',
+    border: '1px solid #e2e8f0',
+    borderRadius: 14,
+    padding: '18px 16px'
+  }
+}, /*#__PURE__*/React.createElement("div", {
+  style: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    fontSize: 13.5,
+    fontWeight: 800,
+    color: '#0f172a',
+    marginBottom: 8
+  }
+}, /*#__PURE__*/React.createElement("span", {
+  style: {
+    color: ACCENT
+  }
+}, /*#__PURE__*/React.createElement(IconCheck, null)), /*#__PURE__*/React.createElement("span", null, item.title)), /*#__PURE__*/React.createElement("p", {
+  style: {
+    fontSize: 12.5,
+    color: '#475569',
+    lineHeight: 1.6,
+    margin: 0
+  }
+}, item.desc)))))));
+
+/* ─── Contact ── */
+const Contact = ({
+  prefillText
+}) => {
+  const [form, setForm] = useState({
+    name: '',
+    contact: '',
+    description: ''
+  });
+  const [status, setStatus] = useState('idle');
+  const [submitting, setSubmitting] = useState(false);
+  const [savedSnapshot, setSavedSnapshot] = useState({
+    name: '',
+    contact: '',
+    description: ''
+  });
+  useEffect(() => {
+    if (prefillText) {
+      setForm(prev => ({
+        ...prev,
+        description: prev.description && !prev.description.startsWith('Цікавить пакет') && !prev.description.startsWith('Хочу подібне') ? prev.description : prefillText
+      }));
+      setStatus('idle');
+    }
+  }, [prefillText]);
+  const buildTgUrl = data => {
+    const txt = `👋 Привіт, Романе! Пишу з портфоліо.\n\n👤 Ім'я: ${data.name || '—'}\n📱 Контакт: ${data.contact || '—'}\n📝 Задача: ${data.description || '—'}`;
+    return `https://t.me/romanmuronchuk?text=${encodeURIComponent(txt)}`;
+  };
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setSubmitting(true);
+    const snapshot = {
+      ...form
+    };
+    setSavedSnapshot(snapshot);
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      let delivered = false;
+      try {
+        const res = await fetch(WEBHOOK, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams(snapshot).toString(),
+          signal: controller.signal
+        });
+        if (res.ok) delivered = true;
+      } catch {
+        /* If CORS headers aren't enabled on webhook yet, send no-cors backup request */
+        await fetch(WEBHOOK, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams(snapshot).toString()
+        });
+        delivered = true;
+      } finally {
+        clearTimeout(timer);
+      }
+      if (delivered) {
+        setForm({
+          name: '',
+          contact: '',
+          description: ''
+        });
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  const lbl = {
+    fontSize: 12.5,
+    fontWeight: 700,
+    color: '#1e293b',
+    display: 'block',
+    marginBottom: 6
+  };
+  const CONTACTS = [{
+    icon: /*#__PURE__*/React.createElement(IconTelegram, {
+      sz: 20
+    }),
+    label: 'Telegram (найшвидший зв’язок)',
+    val: '@romanmuronchuk',
+    href: 'https://t.me/romanmuronchuk'
+  }, {
+    icon: /*#__PURE__*/React.createElement(IconEmail, {
+      sz: 20
+    }),
+    label: 'Email для ТЗ та пропозицій',
+    val: 'mironcukroman602@gmail.com',
+    href: 'mailto:mironcukroman602@gmail.com'
+  }, {
+    icon: /*#__PURE__*/React.createElement(IconGithub, {
+      sz: 20
+    }),
+    label: 'GitHub профіль',
+    val: 'github.com/Romanaipro',
+    href: 'https://github.com/Romanaipro'
+  }, {
+    icon: /*#__PURE__*/React.createElement(IconInsta, {
+      sz: 20
+    }),
+    label: 'Instagram блог',
+    val: '@roma.ai.pro',
+    href: 'https://www.instagram.com/roma.ai.pro/'
+  }];
+  return /*#__PURE__*/React.createElement("section", {
+    id: "contact",
+    className: "sec-pad",
+    style: {
+      background: '#07101f',
+      padding: '92px 24px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 1180,
+      margin: '0 auto'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "reveal",
+    style: {
+      textAlign: 'center',
+      marginBottom: 56
+    }
+  }, /*#__PURE__*/React.createElement(SectionLabel, {
+    text: "\u0411\u0435\u0437\u043A\u043E\u0448\u0442\u043E\u0432\u043D\u0430 \u043E\u0446\u0456\u043D\u043A\u0430 \u043F\u0440\u043E\u0435\u043A\u0442\u0443",
+    light: true
+  }), /*#__PURE__*/React.createElement(SectionTitle, {
+    text: "\u041E\u0442\u0440\u0438\u043C\u0430\u0439\u0442\u0435 \u0440\u043E\u0437\u0440\u0430\u0445\u0443\u043D\u043E\u043A \u0432\u0430\u0440\u0442\u043E\u0441\u0442\u0456 \u0442\u0430 \u043F\u043B\u0430\u043D \u0437\u0430\u043F\u0443\u0441\u043A\u0443 \u0432\u0430\u0448\u043E\u0457 \u0441\u0438\u0441\u0442\u0435\u043C\u0438",
+    light: true
+  }), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 15,
+      color: '#94a3b8',
+      marginTop: 12,
+      maxWidth: 620,
+      margin: '12px auto 0',
+      lineHeight: 1.6
+    }
+  }, "\u041E\u043F\u0438\u0448\u0456\u0442\u044C \u0443 \u043A\u0456\u043B\u044C\u043A\u043E\u0445 \u0440\u0435\u0447\u0435\u043D\u043D\u044F\u0445, \u0449\u043E \u0437\u0430\u0440\u0430\u0437 \u0437\u0430\u0431\u0438\u0440\u0430\u0454 \u043D\u0430\u0439\u0431\u0456\u043B\u044C\u0448\u0435 \u0447\u0430\u0441\u0443 \u0443 \u0432\u0430\u0448\u043E\u043C\u0443 \u0431\u0456\u0437\u043D\u0435\u0441\u0456 \u2014 \u044F \u0437\u0430\u043F\u0440\u043E\u043F\u043E\u043D\u0443\u044E \u043F\u0440\u043E\u0441\u0442\u0435 \u0440\u0456\u0448\u0435\u043D\u043D\u044F, \u0442\u043E\u0447\u043D\u0456 \u0442\u0435\u0440\u043C\u0456\u043D\u0438 \u0442\u0430 \u0432\u0430\u0440\u0442\u0456\u0441\u0442\u044C")), /*#__PURE__*/React.createElement("div", {
+    className: "contact-layout",
+    style: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1.45fr',
+      gap: 48,
+      alignItems: 'start'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "reveal",
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 13
+    }
+  }, CONTACTS.map(c => /*#__PURE__*/React.createElement("a", {
+    key: c.label,
+    href: c.href,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "contact-link",
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 14,
+      textDecoration: 'none',
+      padding: '15px 18px',
+      borderRadius: 16,
+      background: 'rgba(255,255,255,.04)',
+      border: '1px solid rgba(255,255,255,.09)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 44,
+      height: 44,
+      borderRadius: 12,
+      background: 'rgba(8,126,164,.22)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#38bdf8',
+      flexShrink: 0
+    }
+  }, c.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: '#94a3b8',
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      letterSpacing: 0.8
+    }
+  }, c.label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      color: '#fff',
+      fontWeight: 700,
+      marginTop: 2
+    }
+  }, c.val)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 4,
+      padding: 20,
+      borderRadius: 16,
+      background: 'rgba(8,126,164,.1)',
+      border: '1px solid rgba(56,189,248,.22)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: '#38bdf8',
+      fontSize: 12,
+      fontWeight: 800,
+      marginBottom: 6,
+      textTransform: 'uppercase',
+      letterSpacing: 1
+    }
+  }, "\u23F1 \u0412\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u044E \u0437\u0430 1\u20132 \u0433\u043E\u0434\u0438\u043D\u0438"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: '#cbd5e1',
+      fontSize: 13.5,
+      lineHeight: 1.65
+    }
+  }, "\u0425\u043E\u0447\u0435\u0442\u0435 \u043F\u043E\u0431\u0430\u0447\u0438\u0442\u0438 \u0434\u0435\u043C\u043E\u043D\u0441\u0442\u0440\u0430\u0446\u0456\u044E \u0432\u043D\u0443\u0442\u0440\u0456\u0448\u043D\u044C\u043E\u0457 \u0430\u0434\u043C\u0456\u043D\u043A\u0438 \u0430\u0431\u043E \u043E\u0431\u0433\u043E\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u0434\u0430\u0447\u0443 \u0433\u043E\u043B\u043E\u0441\u043E\u043C? \u041D\u0430\u043F\u0438\u0448\u0456\u0442\u044C \u043C\u0435\u043D\u0456 \u043D\u0430\u043F\u0440\u044F\u043C\u0443 \u0432 Telegram ", /*#__PURE__*/React.createElement("b", null, "@romanmuronchuk"), "."))), /*#__PURE__*/React.createElement("div", {
+    className: "reveal delay-1"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "form-box",
+    style: {
+      background: '#fff',
+      borderRadius: 20,
+      padding: '34px 36px',
+      boxShadow: '0 24px 60px rgba(0,0,0,.35)'
+    }
+  }, status === 'success' ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: 'center',
+      padding: '12px 0'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 64,
+      height: 64,
+      borderRadius: '50%',
+      background: '#ecfdf5',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '0 auto 18px',
+      fontSize: 28
+    }
+  }, "\u2705"), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 22,
+      fontWeight: 800,
+      color: '#0f172a',
+      margin: '0 0 8px'
+    }
+  }, "\u0414\u044F\u043A\u0443\u044E, ", savedSnapshot.name, "! \u0417\u0430\u043F\u0438\u0442 \u043F\u0440\u0438\u0439\u043D\u044F\u0442\u043E"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: '#475569',
+      fontSize: 14,
+      lineHeight: 1.65,
+      marginBottom: 20
+    }
+  }, "\u042F \u0432\u0436\u0435 \u043E\u0442\u0440\u0438\u043C\u0430\u0432 \u0432\u0430\u0448\u0443 \u0437\u0430\u044F\u0432\u043A\u0443 \u0456 \u0437\u0432\u2019\u044F\u0436\u0443\u0441\u044F \u0437 \u0432\u0430\u043C\u0438 \u043D\u0430\u0439\u0431\u043B\u0438\u0436\u0447\u0438\u043C \u0447\u0430\u0441\u043E\u043C. \u042F\u043A\u0449\u043E \u0445\u043E\u0447\u0435\u0442\u0435 \u043E\u0442\u0440\u0438\u043C\u0430\u0442\u0438 \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u044C \u043C\u0438\u0442\u0442\u0454\u0432\u043E \u2014 \u043D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \u043A\u043D\u043E\u043F\u043A\u0443 \u043D\u0438\u0436\u0447\u0435, \u0449\u043E\u0431 \u043F\u0440\u043E\u0434\u0443\u0431\u043B\u044E\u0432\u0430\u0442\u0438 \u043F\u043E\u0432\u0456\u0434\u043E\u043C\u043B\u0435\u043D\u043D\u044F \u0443 \u043C\u0456\u0439 Telegram:"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 10,
+      justifyContent: 'center',
+      flexWrap: 'wrap'
+    }
+  }, /*#__PURE__*/React.createElement("a", {
+    href: buildTgUrl(savedSnapshot),
+    target: "_blank",
+    rel: "noopener noreferrer",
+    style: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 8,
+      background: ACCENT,
+      color: '#fff',
+      padding: '12px 22px',
+      borderRadius: 10,
+      fontWeight: 800,
+      fontSize: 13.5,
+      textDecoration: 'none'
+    }
+  }, /*#__PURE__*/React.createElement(IconTelegram, {
+    sz: 17
+  }), " \u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 \u0434\u0456\u0430\u043B\u043E\u0433 \u0443 Telegram \u2192"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setStatus('idle'),
+    style: {
+      border: '1.5px solid #cbd5e1',
+      background: '#fff',
+      color: '#334155',
+      padding: '12px 18px',
+      borderRadius: 10,
+      fontFamily: 'inherit',
+      fontWeight: 700,
+      fontSize: 13.5,
+      cursor: 'pointer'
+    }
+  }, "\u041D\u0430\u0434\u0456\u0441\u043B\u0430\u0442\u0438 \u0449\u0435 \u043E\u0434\u0438\u043D \u0437\u0430\u043F\u0438\u0442"))) : /*#__PURE__*/React.createElement("form", {
+    onSubmit: handleSubmit
+  }, status === 'error' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: '#fef2f2',
+      border: '1px solid #fecaca',
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 18,
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: '#b91c1c',
+      fontSize: 13,
+      fontWeight: 600,
+      margin: '0 0 8px'
+    }
+  }, "\u0421\u0435\u0440\u0432\u0435\u0440 \u0442\u0438\u043C\u0447\u0430\u0441\u043E\u0432\u043E \u043D\u0435 \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u0454. \u041D\u0430\u0434\u0456\u0448\u043B\u0456\u0442\u044C \u0441\u0444\u043E\u0440\u043C\u043E\u0432\u0430\u043D\u0443 \u0437\u0430\u044F\u0432\u043A\u0443 \u043D\u0430\u043F\u0440\u044F\u043C\u0443 \u0432 Telegram \u0432 1 \u043A\u043B\u0456\u043A:"), /*#__PURE__*/React.createElement("a", {
+    href: buildTgUrl(form),
+    target: "_blank",
+    rel: "noopener noreferrer",
+    style: {
+      display: 'inline-block',
+      background: '#dc2626',
+      color: '#fff',
+      padding: '8px 16px',
+      borderRadius: 8,
+      fontWeight: 700,
+      fontSize: 13,
+      textDecoration: 'none'
+    }
+  }, "\u041D\u0430\u0434\u0456\u0441\u043B\u0430\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 Telegram \u2192")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "field-name",
+    style: lbl
+  }, "\u0412\u0430\u0448\u0435 \u0456\u043C\u2019\u044F"), /*#__PURE__*/React.createElement("input", {
+    id: "field-name",
+    name: "name",
+    autoComplete: "name",
+    className: "form-input",
+    type: "text",
+    value: form.name,
+    onChange: e => setForm(p => ({
+      ...p,
+      name: e.target.value
+    })),
+    required: true,
+    disabled: submitting,
+    placeholder: "\u041D\u0430\u043F\u0440\u0438\u043A\u043B\u0430\u0434: \u041E\u043B\u0435\u043A\u0441\u0430\u043D\u0434\u0440"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "field-contact",
+    style: lbl
+  }, "\u0412\u0430\u0448 Telegram \u0430\u0431\u043E \u0442\u0435\u043B\u0435\u0444\u043E\u043D / Email"), /*#__PURE__*/React.createElement("input", {
+    id: "field-contact",
+    name: "contact",
+    autoComplete: "tel",
+    className: "form-input",
+    type: "text",
+    value: form.contact,
+    onChange: e => setForm(p => ({
+      ...p,
+      contact: e.target.value
+    })),
+    required: true,
+    disabled: submitting,
+    placeholder: "@username \u0430\u0431\u043E +380..."
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 22
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "field-desc",
+    style: lbl
+  }, "\u041A\u043E\u0440\u043E\u0442\u043A\u043E \u043F\u0440\u043E \u0432\u0430\u0448\u0443 \u0437\u0430\u0434\u0430\u0447\u0443 \u0430\u0431\u043E \u0431\u0430\u0436\u0430\u043D\u0438\u0439 \u043F\u0430\u043A\u0435\u0442"), /*#__PURE__*/React.createElement("textarea", {
+    id: "field-desc",
+    name: "description",
+    className: "form-input",
+    style: {
+      resize: 'vertical',
+      minHeight: 110
+    },
+    value: form.description,
+    onChange: e => setForm(p => ({
+      ...p,
+      description: e.target.value
+    })),
+    required: true,
+    disabled: submitting,
+    rows: 4,
+    placeholder: "\u041D\u0430\u043F\u0440\u0438\u043A\u043B\u0430\u0434: \u041F\u043E\u0442\u0440\u0456\u0431\u0435\u043D \u0456\u043D\u0442\u0435\u0440\u043D\u0435\u0442-\u043C\u0430\u0433\u0430\u0437\u0438\u043D \u0443 Telegram \u0430\u0431\u043E \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0430\u0446\u0456\u044F \u043F\u0440\u0430\u0439\u0441\u0456\u0432 \u043F\u043E\u0441\u0442\u0430\u0447\u0430\u043B\u044C\u043D\u0438\u043A\u0456\u0432 \u0434\u043B\u044F Prom.ua / SalesDrive..."
+  })), /*#__PURE__*/React.createElement("button", {
+    type: "submit",
+    disabled: submitting,
+    style: {
+      width: '100%',
+      padding: '15px 20px',
+      background: submitting ? '#94a3b8' : `linear-gradient(135deg,${ACCENT},#0ea5c9)`,
+      color: '#fff',
+      border: 'none',
+      borderRadius: 10,
+      fontFamily: 'inherit',
+      fontSize: 15,
+      fontWeight: 800,
+      cursor: submitting ? 'not-allowed' : 'pointer',
+      boxShadow: submitting ? 'none' : '0 8px 24px rgba(8,126,164,.35)'
+    }
+  }, submitting ? 'Відправляємо запит...' : 'Отримати оцінку та план реалізації →')))))));
+};
+
+/* ─── App ── */
+const App = () => {
+  const [active, setActive] = useState('');
+  const [prefillText, setPrefillText] = useState('');
+  useScrollReveal();
+  useEffect(() => {
+    const fn = () => {
+      const order = ['contact', 'pricing', 'reviews', 'certificates', 'cases', 'about'];
+      const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80;
+      if (nearBottom) {
+        setActive('contact');
+        return;
+      }
+      for (const key of order) {
+        const el = document.getElementById(key);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= 120) {
+          setActive(key);
+          return;
+        }
+      }
+      setActive('');
+    };
+    window.addEventListener('scroll', fn, {
+      passive: true
+    });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  const onNav = key => {
+    scrollToSection(key);
+    setActive(key);
+  };
+  const handleSelectWithContext = contextText => {
+    if (typeof contextText === 'string' && contextText) {
+      setPrefillText(contextText);
+    }
+    onNav('contact');
+  };
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Header, {
+    onNav: onNav,
+    active: active
+  }), /*#__PURE__*/React.createElement("main", null, /*#__PURE__*/React.createElement(Hero, {
+    onCTA: () => onNav('contact'),
+    onCases: () => onNav('cases')
+  }), /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement(Cases, {
+    onNavContact: handleSelectWithContext
+  }), /*#__PURE__*/React.createElement(Certificates, null), /*#__PURE__*/React.createElement(Reviews, null), /*#__PURE__*/React.createElement(Pricing, {
+    onSelect: handleSelectWithContext
+  }), /*#__PURE__*/React.createElement(Contact, {
+    prefillText: prefillText
+  })), /*#__PURE__*/React.createElement("footer", {
+    style: {
+      background: '#040a14',
+      textAlign: 'center',
+      padding: '28px 24px',
+      borderTop: '1px solid rgba(255,255,255,.07)'
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: '#94a3b8',
+      fontSize: 13,
+      fontWeight: 500
+    }
+  }, "\xA9 ", new Date().getFullYear(), " \u0420\u043E\u043C\u0430\u043D \u041C\u0438\u0440\u043E\u043D\u0447\u0443\u043A (Roman Myronchuk) \u2014 \u0420\u043E\u0437\u0440\u043E\u0431\u043A\u0430 AI-\u0441\u0438\u0441\u0442\u0435\u043C \u0442\u0430 E-commerce \u043F\u0456\u0434 \u043A\u043B\u044E\u0447. \u0423\u0441\u0456 \u043F\u0440\u0430\u0432\u0430 \u0437\u0430\u0445\u0438\u0449\u0435\u043D\u043E.")));
+};
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));

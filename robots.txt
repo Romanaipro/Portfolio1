@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://portfolio1-beryl-chi.vercel.app/sitemap.xml
