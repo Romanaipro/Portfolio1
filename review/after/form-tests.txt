@@ -1,0 +1,22 @@
+✔ only matching readable acceptance succeeds (58.4215ms)
+✔ generic 200 is uncertain, not success (1.2964ms)
+✔ wrong ID is uncertain, not success (1.3705ms)
+✔ explicit rejection is uncertain, not success (1.0447ms)
+✔ readable 400 reports error with no retry (3.5418ms)
+✔ readable 422 reports error with no retry (0.6197ms)
+✔ readable 500 reports error with no retry (2.0652ms)
+✔ readable 503 reports error with no retry (1.2564ms)
+✔ network/CORS failure makes one attempt (0.8403ms)
+✔ opaque response never succeeds (0.8393ms)
+✔ invalid JSON and empty 200 never succeed (2.2829ms)
+✔ timeout bounds fetch and body reading (62.8371ms)
+✔ double click suppressed; uncertain retry keeps ID; changed payload gets new ID (6.0433ms)
+✔ a new identical submission after acceptance gets a fresh ID (1.1962ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 463.7022

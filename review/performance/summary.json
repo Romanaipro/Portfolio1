@@ -1,0 +1,400 @@
+[
+  {
+    "version": "before",
+    "run": 1,
+    "formFactor": "mobile",
+    "lcp": 4315.07875,
+    "cls": 0.1010171382959633,
+    "fcp": 2213.653,
+    "scores": {
+      "performance": 0.5,
+      "accessibility": 0.95,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "shifts": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "extra"
+          },
+          "label": "Element"
+        },
+        {
+          "key": "score",
+          "valueType": "numeric",
+          "subItemsHeading": {
+            "key": "cause",
+            "valueType": "text"
+          },
+          "granularity": 0.001,
+          "label": "Layout shift score"
+        }
+      ],
+      "items": [
+        {
+          "node": {
+            "type": "node",
+            "lhId": "page-1-DIV",
+            "path": "1,HTML,1,BODY,0,DIV,0,DIV,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,3,DIV",
+            "selector": "div.hero-inner > div.hero-layout > div > div.hero-btns",
+            "boundingRect": {
+              "top": 548,
+              "bottom": 722,
+              "left": 16,
+              "right": 396,
+              "width": 380,
+              "height": 174
+            },
+            "snippet": "<div class=\"hero-btns\" style=\"display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap;\">",
+            "nodeLabel": "Розрахувати вартість і терміни →\nДивитися робочі системи (6)\nНаписати в Telegram"
+          },
+          "score": 0.1010171382959633
+        }
+      ]
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "lighthouse": "13.6.0"
+  },
+  {
+    "version": "before",
+    "run": 2,
+    "formFactor": "mobile",
+    "lcp": 4057.057,
+    "cls": 0.10676351823168943,
+    "fcp": 2719.117,
+    "scores": {
+      "performance": 0.5,
+      "accessibility": 0.95,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "shifts": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "extra"
+          },
+          "label": "Element"
+        },
+        {
+          "key": "score",
+          "valueType": "numeric",
+          "subItemsHeading": {
+            "key": "cause",
+            "valueType": "text"
+          },
+          "granularity": 0.001,
+          "label": "Layout shift score"
+        }
+      ],
+      "items": [
+        {
+          "node": {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,0,DIV,0,DIV,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,3,DIV",
+            "selector": "div.hero-inner > div.hero-layout > div > div.hero-btns",
+            "boundingRect": {
+              "top": 548,
+              "bottom": 722,
+              "left": 16,
+              "right": 396,
+              "width": 380,
+              "height": 174
+            },
+            "snippet": "<div class=\"hero-btns\" style=\"display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap;\">",
+            "nodeLabel": "Розрахувати вартість і терміни →\nДивитися робочі системи (6)\nНаписати в Telegram"
+          },
+          "score": 0.1008406546261589,
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "extra": {
+                  "type": "url",
+                  "value": "https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459W1hyyTh89ZNpQ.woff2"
+                },
+                "cause": "Web font loaded"
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "page-2-B",
+            "path": "1,HTML,1,BODY,0,DIV,0,DIV,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,2,P,1,B",
+            "selector": "div.hero-layout > div > p > b",
+            "boundingRect": {
+              "top": 434,
+              "bottom": 481,
+              "left": 31,
+              "right": 394,
+              "width": 362,
+              "height": 47
+            },
+            "snippet": "<b>",
+            "nodeLabel": "SalesDrive, KeyCRM, Prom.ua та Новою Поштою"
+          },
+          "score": 0.00592286360553053,
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "extra": {
+                  "type": "url",
+                  "value": "https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2"
+                },
+                "cause": "Web font loaded"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "lighthouse": "13.6.0"
+  },
+  {
+    "version": "before",
+    "run": 3,
+    "formFactor": "mobile",
+    "lcp": 3264.0795,
+    "cls": 0.10676351823168943,
+    "fcp": 2226.71,
+    "scores": {
+      "performance": 0.6,
+      "accessibility": 0.95,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "shifts": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "extra"
+          },
+          "label": "Element"
+        },
+        {
+          "key": "score",
+          "valueType": "numeric",
+          "subItemsHeading": {
+            "key": "cause",
+            "valueType": "text"
+          },
+          "granularity": 0.001,
+          "label": "Layout shift score"
+        }
+      ],
+      "items": [
+        {
+          "node": {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,0,DIV,0,DIV,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,3,DIV",
+            "selector": "div.hero-inner > div.hero-layout > div > div.hero-btns",
+            "boundingRect": {
+              "top": 548,
+              "bottom": 722,
+              "left": 16,
+              "right": 396,
+              "width": 380,
+              "height": 174
+            },
+            "snippet": "<div class=\"hero-btns\" style=\"display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap;\">",
+            "nodeLabel": "Розрахувати вартість і терміни →\nДивитися робочі системи (6)\nНаписати в Telegram"
+          },
+          "score": 0.1008406546261589,
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "extra": {
+                  "type": "url",
+                  "value": "https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459W1hyyTh89ZNpQ.woff2"
+                },
+                "cause": "Web font loaded"
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "page-2-B",
+            "path": "1,HTML,1,BODY,0,DIV,0,DIV,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,2,P,1,B",
+            "selector": "div.hero-layout > div > p > b",
+            "boundingRect": {
+              "top": 434,
+              "bottom": 481,
+              "left": 31,
+              "right": 394,
+              "width": 362,
+              "height": 47
+            },
+            "snippet": "<b>",
+            "nodeLabel": "SalesDrive, KeyCRM, Prom.ua та Новою Поштою"
+          },
+          "score": 0.00592286360553053,
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "extra": {
+                  "type": "url",
+                  "value": "https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2"
+                },
+                "cause": "Web font loaded"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "lighthouse": "13.6.0"
+  },
+  {
+    "version": "after",
+    "run": 1,
+    "formFactor": "mobile",
+    "lcp": 1362.5415847817844,
+    "cls": 0,
+    "fcp": 1362.5415847817844,
+    "scores": {
+      "performance": 0.84,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "shifts": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "extra"
+          },
+          "label": "Element"
+        },
+        {
+          "key": "score",
+          "valueType": "numeric",
+          "subItemsHeading": {
+            "key": "cause",
+            "valueType": "text"
+          },
+          "granularity": 0.001,
+          "label": "Layout shift score"
+        }
+      ],
+      "items": []
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "lighthouse": "13.6.0"
+  },
+  {
+    "version": "after",
+    "run": 2,
+    "formFactor": "mobile",
+    "lcp": 1353.2770215500204,
+    "cls": 0,
+    "fcp": 1353.2770215500204,
+    "scores": {
+      "performance": 0.87,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "shifts": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "extra"
+          },
+          "label": "Element"
+        },
+        {
+          "key": "score",
+          "valueType": "numeric",
+          "subItemsHeading": {
+            "key": "cause",
+            "valueType": "text"
+          },
+          "granularity": 0.001,
+          "label": "Layout shift score"
+        }
+      ],
+      "items": []
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "lighthouse": "13.6.0"
+  },
+  {
+    "version": "after",
+    "run": 3,
+    "formFactor": "mobile",
+    "lcp": 1354.2138281364828,
+    "cls": 0,
+    "fcp": 1354.2138281364828,
+    "scores": {
+      "performance": 0.89,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "shifts": {
+      "type": "table",
+      "headings": [
+        {
+          "key": "node",
+          "valueType": "node",
+          "subItemsHeading": {
+            "key": "extra"
+          },
+          "label": "Element"
+        },
+        {
+          "key": "score",
+          "valueType": "numeric",
+          "subItemsHeading": {
+            "key": "cause",
+            "valueType": "text"
+          },
+          "granularity": 0.001,
+          "label": "Layout shift score"
+        }
+      ],
+      "items": []
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "lighthouse": "13.6.0"
+  },
+  {
+    "version": "after",
+    "formFactor": "desktop",
+    "lcp": 521.2111837420391,
+    "cls": 0,
+    "scores": {
+      "performance": 1,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  }
+]

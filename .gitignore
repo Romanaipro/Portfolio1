@@ -1,2 +1,5 @@
 .vercel
 .claude
+node_modules/
+dist/
+review/before/original-app.js

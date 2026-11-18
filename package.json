@@ -1,0 +1,17 @@
+{
+  "name": "roman-myronchuk-portfolio",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "start": "node scripts/serve.cjs",
+    "test": "node --test tests/form.test.cjs",
+    "test:browser": "node tests/browser.cjs",
+    "test:performance": "node tests/performance.cjs",
+    "test:supplemental": "node tests/supplemental.cjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "lighthouse": "^13.6.0",
+    "playwright": "^1.65.1"
+  }
+}

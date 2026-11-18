@@ -1,0 +1,355 @@
+{
+  "contrast": [
+    {
+      "package": 0,
+      "state": "normal",
+      "ratio": 12.071120059460124,
+      "foreground": "rgb(30, 56, 81)",
+      "background": "rgb(255, 255, 255)",
+      "outline": "none",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 0,
+      "state": "hover",
+      "ratio": 11.104541002564735,
+      "foreground": "rgb(30, 56, 81)",
+      "background": "rgb(234, 248, 251)",
+      "outline": "none",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 0,
+      "state": "focus",
+      "ratio": 12.071120059460124,
+      "foreground": "rgb(30, 56, 81)",
+      "background": "rgb(255, 255, 255)",
+      "outline": "solid",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 1,
+      "state": "normal",
+      "ratio": 5.067828999292387,
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(8, 120, 151)",
+      "outline": "none",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 1,
+      "state": "hover",
+      "ratio": 7.490120155056625,
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(5, 92, 119)",
+      "outline": "none",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 1,
+      "state": "focus",
+      "ratio": 5.067828999292387,
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(8, 120, 151)",
+      "outline": "solid",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 2,
+      "state": "normal",
+      "ratio": 12.071120059460124,
+      "foreground": "rgb(30, 56, 81)",
+      "background": "rgb(255, 255, 255)",
+      "outline": "none",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 2,
+      "state": "hover",
+      "ratio": 11.104541002564735,
+      "foreground": "rgb(30, 56, 81)",
+      "background": "rgb(234, 248, 251)",
+      "outline": "none",
+      "outlineWidth": "3px"
+    },
+    {
+      "package": 2,
+      "state": "focus",
+      "ratio": 12.071120059460124,
+      "foreground": "rgb(30, 56, 81)",
+      "background": "rgb(255, 255, 255)",
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  ],
+  "axe": [
+    {
+      "state": "all-cases-1440",
+      "violations": []
+    },
+    {
+      "state": "dialog-1440",
+      "violations": []
+    },
+    {
+      "state": "all-cases-390",
+      "violations": []
+    },
+    {
+      "state": "dialog-390",
+      "violations": []
+    }
+  ],
+  "external": [
+    {
+      "url": "https://urbantrend.com.ua",
+      "status": 200,
+      "finalUrl": "https://urbantrend.com.ua/"
+    },
+    {
+      "url": "https://nardy-katalog.netlify.app/",
+      "status": 200,
+      "finalUrl": "https://nardy-katalog.netlify.app/"
+    },
+    {
+      "url": "https://github.com/Romanaipro",
+      "status": 200,
+      "finalUrl": "https://github.com/Romanaipro"
+    },
+    {
+      "url": "https://www.instagram.com/roma.ai.pro/",
+      "status": 200,
+      "finalUrl": "https://www.instagram.com/roma.ai.pro/"
+    },
+    {
+      "url": "https://t.me/URBAN_TREND_SHOP_BOT",
+      "status": 200,
+      "finalUrl": "https://t.me/URBAN_TREND_SHOP_BOT"
+    },
+    {
+      "url": "https://t.me/yedki_hub_test_bot",
+      "status": 200,
+      "finalUrl": "https://t.me/yedki_hub_test_bot"
+    },
+    {
+      "url": "https://t.me/romanmuronchuk",
+      "status": 200,
+      "finalUrl": "https://t.me/romanmuronchuk"
+    }
+  ],
+  "fontGeometry": {
+    "initial": {
+      ".hero h1": {
+        "x": 16,
+        "y": 172.78125,
+        "width": 358,
+        "height": 162.6875
+      },
+      ".hero-actions": {
+        "x": 16,
+        "y": 482.03125,
+        "width": 358,
+        "height": 48
+      },
+      ".hero-actions .primary": {
+        "x": 16,
+        "y": 482.03125,
+        "width": 162.671875,
+        "height": 48
+      },
+      ".hero-actions .ghost": {
+        "x": 187.671875,
+        "y": 482.03125,
+        "width": 158.390625,
+        "height": 48
+      }
+    },
+    "afterFontsReady": {
+      ".hero h1": {
+        "x": 16,
+        "y": 172.78125,
+        "width": 358,
+        "height": 162.6875
+      },
+      ".hero-actions": {
+        "x": 16,
+        "y": 482.03125,
+        "width": 358,
+        "height": 48
+      },
+      ".hero-actions .primary": {
+        "x": 16,
+        "y": 482.03125,
+        "width": 162.671875,
+        "height": 48
+      },
+      ".hero-actions .ghost": {
+        "x": 187.671875,
+        "y": 482.03125,
+        "width": 158.390625,
+        "height": 48
+      }
+    }
+  },
+  "scriptFailure": "static content/contact visible; inactive form hidden",
+  "metadata": {
+    "lang": "uk",
+    "h1": 1,
+    "canonical": "https://portfolio1-beryl-chi.vercel.app/",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Роман Мирончук — розробник AI-систем та e-commerce-рішень",
+      "url": "https://portfolio1-beryl-chi.vercel.app/",
+      "description": "Автоматизую продажі, прайси та склад товарного бізнесу. Сайти, Telegram-магазини та інтеграції з CRM, оплатою й доставкою. Кейси та відкриті ціни.",
+      "priceRange": "від $300",
+      "founder": {
+        "@type": "Person",
+        "name": "Роман Мирончук",
+        "sameAs": [
+          "https://github.com/Romanaipro",
+          "https://t.me/romanmuronchuk"
+        ]
+      }
+    }
+  },
+  "localRequests": [
+    {
+      "url": "/",
+      "status": 200
+    },
+    {
+      "url": "/assets/avatar.webp",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts.css",
+      "status": 200
+    },
+    {
+      "url": "/assets/styles.css",
+      "status": 200
+    },
+    {
+      "url": "/assets/form.js",
+      "status": 200
+    },
+    {
+      "url": "/assets/app.js",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts/montserrat-cyrillic.woff2",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts/montserrat-latin.woff2",
+      "status": 200
+    },
+    {
+      "url": "/assets/favicon.svg",
+      "status": 200
+    },
+    {
+      "url": "/assets/certificates/cert-google-ai-business.webp",
+      "status": 200
+    },
+    {
+      "url": "/assets/certificates/cert-makeai-systems.webp",
+      "status": 200
+    },
+    {
+      "url": "/assets/certificates/cert-alpi-ai-creator.webp",
+      "status": 200
+    },
+    {
+      "url": "/",
+      "status": 200
+    },
+    {
+      "url": "/assets/avatar.webp",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts.css",
+      "status": 200
+    },
+    {
+      "url": "/assets/styles.css",
+      "status": 200
+    },
+    {
+      "url": "/assets/form.js",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts/montserrat-cyrillic.woff2",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts/montserrat-latin.woff2",
+      "status": 200
+    },
+    {
+      "url": "/assets/app.js",
+      "status": 200
+    },
+    {
+      "url": "/assets/favicon.svg",
+      "status": 200
+    },
+    {
+      "url": "/assets/favicon.svg",
+      "status": 200
+    },
+    {
+      "url": "/assets/favicon.svg",
+      "status": 200
+    },
+    {
+      "url": "/",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts.css",
+      "status": 200
+    },
+    {
+      "url": "/assets/avatar.webp",
+      "status": 200
+    },
+    {
+      "url": "/assets/styles.css",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts/montserrat-cyrillic.woff2",
+      "status": 200
+    },
+    {
+      "url": "/assets/form.js",
+      "status": 200
+    },
+    {
+      "url": "/assets/app.js",
+      "status": 200
+    },
+    {
+      "url": "/assets/fonts/montserrat-latin.woff2",
+      "status": 200
+    },
+    {
+      "url": "/assets/favicon.svg",
+      "status": 200
+    },
+    {
+      "url": "/assets/favicon.svg",
+      "status": 200
+    },
+    {
+      "url": "/assets/favicon.svg",
+      "status": 200
+    }
+  ],
+  "baselineButton": "Як це працює всередині"
+}

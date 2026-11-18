@@ -1,0 +1,103 @@
+{
+  "viewports": [
+    {
+      "width": 1440,
+      "document": 1440,
+      "issues": []
+    },
+    {
+      "width": 768,
+      "document": 768,
+      "issues": []
+    },
+    {
+      "width": 390,
+      "document": 390,
+      "issues": []
+    },
+    {
+      "width": 320,
+      "document": 320,
+      "issues": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "responsive 1440",
+      "detail": {
+        "width": 1440,
+        "document": 1440,
+        "issues": []
+      }
+    },
+    {
+      "name": "responsive 768",
+      "detail": {
+        "width": 768,
+        "document": 768,
+        "issues": []
+      }
+    },
+    {
+      "name": "responsive 390",
+      "detail": {
+        "width": 390,
+        "document": 390,
+        "issues": []
+      }
+    },
+    {
+      "name": "responsive 320",
+      "detail": {
+        "width": 320,
+        "document": 320,
+        "issues": []
+      }
+    },
+    {
+      "name": "six deep links, reload, Back/Forward, filters and context",
+      "detail": "passed"
+    },
+    {
+      "name": "three certificates keyboard and focus",
+      "detail": "Enter / Space / Shift+Tab / Tab / Escape"
+    },
+    {
+      "name": "mock form UI",
+      "detail": "validation, 500, unexpected 200, network, accepted; preserved data; identical retry ID"
+    },
+    {
+      "name": "desktop reflow equivalent 200% / 400%",
+      "detail": "640px and 320px CSS layout widths; browser zoom UI not exercised"
+    },
+    {
+      "name": "Portfolio.html alias",
+      "detail": "same generated content"
+    },
+    {
+      "name": "no JavaScript",
+      "detail": "full static offer and direct contacts remain"
+    }
+  ],
+  "console": [],
+  "requests": [
+    {
+      "request_id": "ebb9857f-5d7c-4270-bead-a3f99ad03972"
+    },
+    {
+      "request_id": "ebb9857f-5d7c-4270-bead-a3f99ad03972"
+    },
+    {
+      "request_id": "ebb9857f-5d7c-4270-bead-a3f99ad03972"
+    },
+    {
+      "request_id": "ebb9857f-5d7c-4270-bead-a3f99ad03972"
+    }
+  ],
+  "external": [],
+  "browser": "157.0.8103.51",
+  "axe": {
+    "violations": [],
+    "passes": 45
+  }
+}
